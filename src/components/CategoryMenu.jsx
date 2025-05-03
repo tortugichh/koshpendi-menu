@@ -1,26 +1,50 @@
 import PropTypes from 'prop-types';
+import { Box, Container, Button } from '@mui/material';
 
 const CategoryMenu = ({ categories, activeCategory, setActiveCategory }) => {
   return (
-    <div className="border-b border-koshpendi-border sticky top-16 bg-white z-10">
-      <div className="container-custom overflow-x-auto">
-        <div className="flex space-x-6 py-4 min-w-max">
+    <Box 
+      sx={{ 
+        borderBottom: 1, 
+        borderColor: 'divider',
+        position: 'sticky',
+        top: 64,
+        bgcolor: 'background.paper',
+        zIndex: 10
+      }}
+    >
+      <Container sx={{ overflowX: 'auto' }}>
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            py: 2, 
+            minWidth: 'max-content' 
+          }}
+        >
           {categories.map((category) => (
-            <button
+            <Button
               key={category.id}
-              className={`whitespace-nowrap font-medium ${
-                activeCategory === category.id 
-                  ? 'text-koshpendi-primary border-b-2 border-koshpendi-primary' 
-                  : 'text-koshpendi-text-light hover:text-koshpendi-text-dark'
-              }`}
+              sx={{
+                mx: 1.5, 
+                px: 1,
+                fontWeight: 500,
+                color: activeCategory === category.id ? 'primary.main' : 'text.secondary',
+                borderBottom: activeCategory === category.id ? 2 : 0,
+                borderColor: 'primary.main',
+                borderRadius: 0,
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                  color: 'text.primary'
+                }
+              }}
               onClick={() => setActiveCategory(category.id)}
             >
               {category.name}
-            </button>
+            </Button>
           ))}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

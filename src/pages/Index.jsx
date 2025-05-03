@@ -1,160 +1,289 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { Link as RouterLink } from 'react-router-dom';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Button, 
+  Grid, 
+  Paper, 
+  useTheme, 
+  alpha 
+} from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import EditIcon from '@mui/icons-material/Edit';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import PeopleIcon from '@mui/icons-material/People';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Index = () => {
+  const theme = useTheme();
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
       
-      <main className="flex-grow pt-16"> {/* pt-16 to account for fixed header */}
+      <Box component="main" sx={{ flexGrow: 1, pt: 8 }}>
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-koshpendi-secondary to-white py-16 md:py-28">
-          <div className="container-custom">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-12 md:mb-0">
-                <h1 className="animate-fade-in text-koshpendi-text-dark mb-4">
+        <Box 
+          sx={{ 
+            bgcolor: alpha(theme.palette.secondary.main, 0.5),
+            py: { xs: 8, md: 12 },
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          <Container>
+            <Grid container spacing={4} alignItems="center">
+              <Grid item xs={12} md={6} sx={{ animation: 'fadeIn 1s ease-in' }}>
+                <Typography
+                  variant="h3"
+                  component="h1"
+                  color="text.primary"
+                  gutterBottom
+                  sx={{ fontWeight: 'bold' }}
+                >
                   Быстрые QR-меню и удобная доставка
-                </h1>
-                <p className="text-koshpendi-text-light text-lg mb-8">
+                </Typography>
+                <Typography
+                  variant="h6"
+                  color="text.secondary"
+                  paragraph
+                  sx={{ mb: 4 }}
+                >
                   Kóshpendi Menu — современная платформа для цифровизации вашего ресторана
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/restaurants" className="btn-primary flex items-center">
-                    <span>Найти ресторан</span>
-                    <ArrowRight size={18} className="ml-2" />
-                  </Link>
-                  <Link to="/registration" className="btn-secondary flex items-center">
-                    <span>Зарегистрировать ресторан</span>
-                  </Link>
-                </div>
-              </div>
-              <div className="md:w-1/2 flex justify-center">
-                <img 
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                  <Button
+                    component={RouterLink}
+                    to="/restaurants"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Найти ресторан
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to="/registration"
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                  >
+                    Зарегистрировать ресторан
+                  </Button>
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Box
+                  component="img"
                   src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&h=400"
-                  alt="QR меню на смартфоне" 
-                  className="rounded-kosh-md shadow-lg w-full max-w-md"
+                  alt="QR меню на смартфоне"
+                  sx={{
+                    borderRadius: 2,
+                    boxShadow: 4,
+                    width: '100%',
+                    maxWidth: 500,
+                    height: 'auto'
+                  }}
                 />
-              </div>
-            </div>
-          </div>
-        </section>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
 
         {/* Benefits for Customers */}
-        <section className="py-16">
-          <div className="container-custom">
-            <h2 className="text-center text-koshpendi-text-dark mb-12">Преимущества для клиентов</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="card text-center p-kosh-xl">
-                <div className="bg-koshpendi-secondary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-koshpendi-primary">
-                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="9" y1="15" x2="15" y2="15"></line>
-                  </svg>
-                </div>
-                <h3 className="text-koshpendi-text-dark mb-2">Быстрый доступ к меню</h3>
-                <p className="text-koshpendi-text-light">
-                  Отсканируйте QR-код и получите доступ к актуальному меню ресторана
-                </p>
-              </div>
-              <div className="card text-center p-kosh-xl">
-                <div className="bg-koshpendi-secondary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-koshpendi-primary">
-                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                  </svg>
-                </div>
-                <h3 className="text-koshpendi-text-dark mb-2">Удобный заказ</h3>
-                <p className="text-koshpendi-text-light">
-                  Заказывайте еду прямо через мобильное устройство без ожидания официанта
-                </p>
-              </div>
-              <div className="card text-center p-kosh-xl">
-                <div className="bg-koshpendi-secondary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-koshpendi-primary">
-                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                    <polyline points="16 6 12 2 8 6"></polyline>
-                    <line x1="12" y1="2" x2="12" y2="15"></line>
-                  </svg>
-                </div>
-                <h3 className="text-koshpendi-text-dark mb-2">Удобная доставка</h3>
-                <p className="text-koshpendi-text-light">
-                  Закажите доставку еды из любимого ресторана с отслеживанием заказа
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Box sx={{ py: 8 }}>
+          <Container>
+            <Typography
+              variant="h4"
+              component="h2"
+              align="center"
+              color="text.primary"
+              gutterBottom
+              sx={{ mb: 6 }}
+            >
+              Преимущества для клиентов
+            </Typography>
+            <Grid container spacing={4}>
+              {[
+                {
+                  icon: <MenuBookIcon fontSize="large" />,
+                  title: 'Быстрый доступ к меню',
+                  description: 'Отсканируйте QR-код и получите доступ к актуальному меню ресторана'
+                },
+                {
+                  icon: <ShoppingBagIcon fontSize="large" />,
+                  title: 'Удобный заказ',
+                  description: 'Заказывайте еду прямо через мобильное устройство без ожидания официанта'
+                },
+                {
+                  icon: <LocalShippingIcon fontSize="large" />,
+                  title: 'Удобная доставка',
+                  description: 'Закажите доставку еды из любимого ресторана с отслеживанием заказа'
+                }
+              ].map((benefit, index) => (
+                <Grid item xs={12} md={4} key={index}>
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      p: 4,
+                      height: '100%',
+                      textAlign: 'center',
+                      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
+                        boxShadow: 3
+                      }
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: alpha(theme.palette.secondary.main, 0.7),
+                        width: 64,
+                        height: 64,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        mx: 'auto',
+                        mb: 3,
+                        color: 'primary.main'
+                      }}
+                    >
+                      {benefit.icon}
+                    </Box>
+                    <Typography variant="h6" component="h3" gutterBottom color="text.primary">
+                      {benefit.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {benefit.description}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Box>
 
         {/* Benefits for Restaurants */}
-        <section className="py-16 bg-koshpendi-secondary">
-          <div className="container-custom">
-            <h2 className="text-center text-koshpendi-text-dark mb-12">Преимущества для ресторанов</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="card text-center p-kosh-xl bg-white">
-                <div className="bg-white border border-koshpendi-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-koshpendi-primary">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                  </svg>
-                </div>
-                <h3 className="text-koshpendi-text-dark mb-2">Легкое обновление меню</h3>
-                <p className="text-koshpendi-text-light">
-                  Обновляйте меню в реальном времени через простой интерфейс
-                </p>
-              </div>
-              <div className="card text-center p-kosh-xl bg-white">
-                <div className="bg-white border border-koshpendi-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-koshpendi-primary">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                  </svg>
-                </div>
-                <h3 className="text-koshpendi-text-dark mb-2">Аналитика заказов</h3>
-                <p className="text-koshpendi-text-light">
-                  Получайте подробную статистику по заказам и предпочтениям клиентов
-                </p>
-              </div>
-              <div className="card text-center p-kosh-xl bg-white">
-                <div className="bg-white border border-koshpendi-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-koshpendi-primary">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="m16 10-4 4-4-4"></path>
-                  </svg>
-                </div>
-                <h3 className="text-koshpendi-text-dark mb-2">Расширение аудитории</h3>
-                <p className="text-koshpendi-text-light">
-                  Привлекайте новых клиентов через платформу доставки
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Box sx={{ py: 8, bgcolor: 'secondary.main' }}>
+          <Container>
+            <Typography
+              variant="h4"
+              component="h2"
+              align="center"
+              color="text.primary"
+              gutterBottom
+              sx={{ mb: 6 }}
+            >
+              Преимущества для ресторанов
+            </Typography>
+            <Grid container spacing={4}>
+              {[
+                {
+                  icon: <EditIcon fontSize="large" />,
+                  title: 'Легкое обновление меню',
+                  description: 'Обновляйте меню в реальном времени через простой интерфейс'
+                },
+                {
+                  icon: <ShowChartIcon fontSize="large" />,
+                  title: 'Аналитика заказов',
+                  description: 'Получайте подробную статистику по заказам и предпочтениям клиентов'
+                },
+                {
+                  icon: <PeopleIcon fontSize="large" />,
+                  title: 'Расширение аудитории',
+                  description: 'Привлекайте новых клиентов через платформу доставки'
+                }
+              ].map((benefit, index) => (
+                <Grid item xs={12} md={4} key={index}>
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      p: 4,
+                      height: '100%',
+                      textAlign: 'center',
+                      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
+                        boxShadow: 3
+                      }
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: 'background.paper',
+                        width: 64,
+                        height: 64,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        mx: 'auto',
+                        mb: 3,
+                        color: 'primary.main',
+                        border: 1,
+                        borderColor: 'primary.main'
+                      }}
+                    >
+                      {benefit.icon}
+                    </Box>
+                    <Typography variant="h6" component="h3" gutterBottom color="text.primary">
+                      {benefit.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {benefit.description}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Box>
 
         {/* Call to Action */}
-        <section className="py-16">
-          <div className="container-custom text-center">
-            <h2 className="text-koshpendi-text-dark mb-4">Готовы начать?</h2>
-            <p className="text-koshpendi-text-light text-lg mb-8 max-w-xl mx-auto">
-              Присоединяйтесь к Kóshpendi Menu сегодня и переведите свой ресторан на новый уровень обслуживания
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/registration" className="btn-primary flex items-center">
-                <span>Зарегистрировать ресторан</span>
-                <ArrowRight size={18} className="ml-2" />
-              </Link>
-              <Link to="/restaurants" className="btn-secondary flex items-center">
-                <span>Найти ресторан</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-      </main>
+        <Box sx={{ py: 8 }}>
+          <Container>
+            <Box sx={{ textAlign: 'center', maxWidth: 700, mx: 'auto' }}>
+              <Typography variant="h4" component="h2" color="text.primary" gutterBottom>
+                Готовы начать?
+              </Typography>
+              <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 4 }}>
+                Присоединяйтесь к Kóshpendi Menu сегодня и переведите свой ресторан на новый уровень обслуживания
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 2 }}>
+                <Button
+                  component={RouterLink}
+                  to="/registration"
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  endIcon={<ArrowForwardIcon />}
+                >
+                  Зарегистрировать ресторан
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/restaurants"
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                >
+                  Найти ресторан
+                </Button>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
+      </Box>
 
       <Footer />
-    </div>
+    </Box>
   );
 };
 

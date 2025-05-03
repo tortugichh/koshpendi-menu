@@ -1,4 +1,22 @@
 import { useState } from 'react';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Paper, 
+  TextField, 
+  Button, 
+  Checkbox, 
+  FormControlLabel, 
+  Grid, 
+  Link, 
+  List, 
+  ListItem, 
+  ListItemIcon, 
+  ListItemText, 
+  Alert 
+} from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -98,204 +116,224 @@ const RestaurantRegistration = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
       
-      <main className="flex-grow pt-16 pb-16">
-        <div className="container-custom">
-          <h1 className="text-center text-koshpendi-text-dark my-10">Регистрация ресторана</h1>
+      <Box component="main" sx={{ flexGrow: 1, pt: 8, pb: 8 }}>
+        <Container>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            align="center" 
+            sx={{ my: 5, color: 'text.primary' }}
+          >
+            Регистрация ресторана
+          </Typography>
           
-          <div className="max-w-3xl mx-auto">
+          <Box sx={{ maxWidth: 800, mx: 'auto' }}>
             {/* Benefits for restaurants */}
-            <div className="bg-koshpendi-secondary rounded-kosh-md p-kosh-lg mb-8">
-              <h2 className="text-koshpendi-text-dark text-xl font-semibold mb-4">Преимущества для вашего ресторана</h2>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-koshpendi-primary mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-koshpendi-text-light">Привлекайте новых клиентов через платформу Kóshpendi Menu</span>
-                </li>
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-koshpendi-primary mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-koshpendi-text-light">QR-меню — удобный способ цифровизации вашего ресторана</span>
-                </li>
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-koshpendi-primary mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-koshpendi-text-light">Аналитика заказов и предпочтений для улучшения сервиса</span>
-                </li>
-                <li className="flex items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-koshpendi-primary mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-koshpendi-text-light">Удобная панель управления для обновления меню в реальном времени</span>
-                </li>
-              </ul>
-            </div>
+            <Paper 
+              elevation={0}
+              sx={{ 
+                bgcolor: 'secondary.main', 
+                p: 3, 
+                borderRadius: 2, 
+                mb: 4
+              }}
+            >
+              <Typography 
+                variant="h6" 
+                component="h2" 
+                sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+              >
+                Преимущества для вашего ресторана
+              </Typography>
+              <List disablePadding>
+                {[
+                  'Привлекайте новых клиентов через платформу Kóshpendi Menu',
+                  'QR-меню — удобный способ цифровизации вашего ресторана',
+                  'Аналитика заказов и предпочтений для улучшения сервиса',
+                  'Удобная панель управления для обновления меню в реальном времени'
+                ].map((item, index) => (
+                  <ListItem key={index} disablePadding sx={{ py: 0.5 }}>
+                    <ListItemIcon sx={{ minWidth: 36 }}>
+                      <CheckCircleOutlineIcon color="primary" />
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item} 
+                      primaryTypographyProps={{ color: 'text.secondary' }} 
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
             
             {/* Success Message */}
             {successMessage && (
-              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-kosh-md mb-8 text-center">
+              <Alert 
+                severity="success" 
+                sx={{ mb: 4 }}
+              >
                 {successMessage}
-              </div>
+              </Alert>
             )}
             
             {/* Registration Form */}
-            <div className="bg-white p-kosh-lg rounded-kosh-md border border-koshpendi-border">
-              <h2 className="text-koshpendi-text-dark text-xl font-semibold mb-6">Заполните форму для регистрации</h2>
+            <Paper sx={{ p: 4, borderRadius: 2 }}>
+              <Typography 
+                variant="h6" 
+                component="h2" 
+                sx={{ mb: 3, fontWeight: 600, color: 'text.primary' }}
+              >
+                Заполните форму для регистрации
+              </Typography>
               
-              <form onSubmit={handleSubmit}>
-                <div className="space-y-4">
+              <Box component="form" onSubmit={handleSubmit} noValidate>
+                <Grid container spacing={3}>
                   {/* Restaurant Name */}
-                  <div>
-                    <label htmlFor="restaurantName" className="block text-koshpendi-text-dark font-medium mb-1">
-                      Название ресторана*
-                    </label>
-                    <input
-                      type="text"
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
                       id="restaurantName"
                       name="restaurantName"
+                      label="Название ресторана"
                       value={formData.restaurantName}
                       onChange={handleChange}
-                      className={`input-field ${errors.restaurantName ? 'border-koshpendi-error' : ''}`}
+                      error={!!errors.restaurantName}
+                      helperText={errors.restaurantName}
                     />
-                    {errors.restaurantName && (
-                      <p className="text-koshpendi-error text-sm mt-1">{errors.restaurantName}</p>
-                    )}
-                  </div>
+                  </Grid>
                   
                   {/* Contact Person Name */}
-                  <div>
-                    <label htmlFor="contactName" className="block text-koshpendi-text-dark font-medium mb-1">
-                      Контактное лицо*
-                    </label>
-                    <input
-                      type="text"
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
                       id="contactName"
                       name="contactName"
+                      label="Контактное лицо"
                       value={formData.contactName}
                       onChange={handleChange}
-                      className={`input-field ${errors.contactName ? 'border-koshpendi-error' : ''}`}
+                      error={!!errors.contactName}
+                      helperText={errors.contactName}
                     />
-                    {errors.contactName && (
-                      <p className="text-koshpendi-error text-sm mt-1">{errors.contactName}</p>
-                    )}
-                  </div>
+                  </Grid>
                   
                   {/* Phone */}
-                  <div>
-                    <label htmlFor="phone" className="block text-koshpendi-text-dark font-medium mb-1">
-                      Телефон*
-                    </label>
-                    <input
-                      type="tel"
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
                       id="phone"
                       name="phone"
+                      label="Телефон"
+                      placeholder="+7 (XXX) XXX-XX-XX"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="+7 (XXX) XXX-XX-XX"
-                      className={`input-field ${errors.phone ? 'border-koshpendi-error' : ''}`}
+                      error={!!errors.phone}
+                      helperText={errors.phone}
                     />
-                    {errors.phone && (
-                      <p className="text-koshpendi-error text-sm mt-1">{errors.phone}</p>
-                    )}
-                  </div>
+                  </Grid>
                   
                   {/* Email */}
-                  <div>
-                    <label htmlFor="email" className="block text-koshpendi-text-dark font-medium mb-1">
-                      Email*
-                    </label>
-                    <input
-                      type="email"
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
                       id="email"
                       name="email"
+                      label="Email"
+                      type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`input-field ${errors.email ? 'border-koshpendi-error' : ''}`}
+                      error={!!errors.email}
+                      helperText={errors.email}
                     />
-                    {errors.email && (
-                      <p className="text-koshpendi-error text-sm mt-1">{errors.email}</p>
-                    )}
-                  </div>
+                  </Grid>
                   
                   {/* Password */}
-                  <div>
-                    <label htmlFor="password" className="block text-koshpendi-text-dark font-medium mb-1">
-                      Пароль*
-                    </label>
-                    <input
-                      type="password"
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
                       id="password"
                       name="password"
+                      label="Пароль"
+                      type="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className={`input-field ${errors.password ? 'border-koshpendi-error' : ''}`}
+                      error={!!errors.password}
+                      helperText={errors.password}
                     />
-                    {errors.password && (
-                      <p className="text-koshpendi-error text-sm mt-1">{errors.password}</p>
-                    )}
-                  </div>
+                  </Grid>
                   
                   {/* Confirm Password */}
-                  <div>
-                    <label htmlFor="confirmPassword" className="block text-koshpendi-text-dark font-medium mb-1">
-                      Подтвердите пароль*
-                    </label>
-                    <input
-                      type="password"
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
                       id="confirmPassword"
                       name="confirmPassword"
+                      label="Подтвердите пароль"
+                      type="password"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className={`input-field ${errors.confirmPassword ? 'border-koshpendi-error' : ''}`}
+                      error={!!errors.confirmPassword}
+                      helperText={errors.confirmPassword}
                     />
-                    {errors.confirmPassword && (
-                      <p className="text-koshpendi-error text-sm mt-1">{errors.confirmPassword}</p>
-                    )}
-                  </div>
+                  </Grid>
                   
                   {/* Terms Agreement */}
-                  <div className="flex items-start">
-                    <input
-                      type="checkbox"
-                      id="agreeTerms"
-                      name="agreeTerms"
-                      checked={formData.agreeTerms}
-                      onChange={handleChange}
-                      className="mt-1"
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name="agreeTerms"
+                          checked={formData.agreeTerms}
+                          onChange={handleChange}
+                          color="primary"
+                        />
+                      }
+                      label={
+                        <Typography variant="body2" color="text.secondary">
+                          Я согласен с <Link href="#" color="primary">условиями использования</Link> и <Link href="#" color="primary">политикой конфиденциальности</Link>*
+                        </Typography>
+                      }
                     />
-                    <label htmlFor="agreeTerms" className="ml-2 text-koshpendi-text-light text-sm">
-                      Я согласен с <a href="#" className="text-koshpendi-primary hover:underline">условиями использования</a> и <a href="#" className="text-koshpendi-primary hover:underline">политикой конфиденциальности</a>*
-                    </label>
-                  </div>
-                  {errors.agreeTerms && (
-                    <p className="text-koshpendi-error text-sm mt-1">{errors.agreeTerms}</p>
-                  )}
+                    {errors.agreeTerms && (
+                      <Typography variant="caption" color="error">
+                        {errors.agreeTerms}
+                      </Typography>
+                    )}
+                  </Grid>
                   
                   {/* Submit Button */}
-                  <div className="mt-6">
-                    <button type="submit" className="btn-primary w-full">
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      sx={{ mt: 2 }}
+                    >
                       Зарегистрироваться
-                    </button>
-                  </div>
-                  
-                  <p className="text-center text-koshpendi-text-light text-sm mt-4">
-                    После регистрации наш менеджер свяжется с вами для уточнения деталей
-                  </p>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </main>
+                    </Button>
+                    
+                    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+                      После регистрации наш менеджер свяжется с вами для уточнения деталей
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Paper>
+          </Box>
+        </Container>
+      </Box>
 
       <Footer />
-    </div>
+    </Box>
   );
 };
 

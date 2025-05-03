@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
+import { 
+  Box, 
+  Typography, 
+  Button, 
+  Container, 
+  Paper 
+} from '@mui/material';
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,23 +20,64 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-koshpendi-secondary">
-      <div className="text-center p-8 max-w-md bg-white rounded-kosh-md shadow-lg">
-        <div className="w-24 h-24 bg-koshpendi-primary/10 flex items-center justify-center rounded-full mx-auto mb-6">
-          <span className="text-koshpendi-primary text-4xl font-bold">404</span>
-        </div>
-        <h1 className="text-2xl font-bold text-koshpendi-text-dark mb-4">Страница не найдена</h1>
-        <p className="text-koshpendi-text-light mb-8">
-          К сожалению, страница, которую вы ищете, не существует или была перемещена.
-        </p>
-        <Link 
-          to="/" 
-          className="btn-primary inline-block"
+    <Box 
+      sx={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        bgcolor: 'secondary.main'
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper 
+          elevation={2}
+          sx={{ 
+            textAlign: 'center', 
+            p: 4, 
+            borderRadius: 2 
+          }}
         >
-          Вернуться на главную
-        </Link>
-      </div>
-    </div>
+          <Box 
+            sx={{ 
+              width: 96, 
+              height: 96, 
+              bgcolor: 'primary.light', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              borderRadius: '50%', 
+              mx: 'auto', 
+              mb: 3 
+            }}
+          >
+            <Typography 
+              variant="h3" 
+              component="span" 
+              color="primary.main" 
+              fontWeight="bold"
+            >
+              404
+            </Typography>
+          </Box>
+          <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
+            Страница не найдена
+          </Typography>
+          <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 4 }}>
+            К сожалению, страница, которую вы ищете, не существует или была перемещена.
+          </Typography>
+          <Button 
+            component={RouterLink} 
+            to="/" 
+            variant="contained" 
+            color="primary"
+            size="large"
+          >
+            Вернуться на главную
+          </Button>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

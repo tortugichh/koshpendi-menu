@@ -1,4 +1,12 @@
 import { useState } from 'react';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Grid, 
+  Paper, 
+  Alert
+} from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SearchBar from '../components/SearchBar';
@@ -15,12 +23,19 @@ const RestaurantSelection = () => {
   );
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
       
-      <main className="flex-grow pt-16 pb-16">
-        <div className="container-custom">
-          <h1 className="text-center text-koshpendi-text-dark my-10">Выберите ресторан</h1>
+      <Box component="main" sx={{ flexGrow: 1, pt: 8, pb: 8 }}>
+        <Container>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            align="center" 
+            sx={{ my: 5, color: 'text.primary' }}
+          >
+            Выберите ресторан
+          </Typography>
           
           {/* Search */}
           <SearchBar 
@@ -30,32 +45,53 @@ const RestaurantSelection = () => {
           />
           
           {/* QR instruction box */}
-          <div className="bg-koshpendi-secondary p-kosh-lg rounded-kosh-md mb-10 text-center">
-            <h3 className="text-koshpendi-text-dark mb-2">Как использовать QR-код в ресторане</h3>
-            <p className="text-koshpendi-text-light">
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              bgcolor: 'secondary.main', 
+              p: 3, 
+              borderRadius: 2, 
+              mb: 5, 
+              textAlign: 'center' 
+            }}
+          >
+            <Typography 
+              variant="h6" 
+              component="h3" 
+              sx={{ mb: 1, color: 'text.primary' }}
+            >
+              Как использовать QR-код в ресторане
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
               Отсканируйте QR-код на столике ресторана с помощью камеры телефона, 
               чтобы получить доступ к меню напрямую
-            </p>
-          </div>
+            </Typography>
+          </Paper>
           
           {/* Restaurant List */}
           {filteredRestaurants.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Grid container spacing={3}>
               {filteredRestaurants.map(restaurant => (
-                <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+                <Grid item xs={12} sm={6} md={4} key={restaurant.id}>
+                  <RestaurantCard restaurant={restaurant} />
+                </Grid>
               ))}
-            </div>
+            </Grid>
           ) : (
-            <div className="text-center py-16">
-              <h3 className="text-koshpendi-text-dark mb-2">Рестораны не найдены</h3>
-              <p className="text-koshpendi-text-light">Попробуйте изменить поисковый запрос</p>
-            </div>
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Typography variant="h6" component="h3" sx={{ mb: 1, color: 'text.primary' }}>
+                Рестораны не найдены
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                Попробуйте изменить поисковый запрос
+              </Typography>
+            </Box>
           )}
-        </div>
-      </main>
+        </Container>
+      </Box>
 
       <Footer />
-    </div>
+    </Box>
   );
 };
 

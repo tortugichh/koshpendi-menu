@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Grid, 
+  CircularProgress 
+} from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CategoryMenu from '../components/CategoryMenu';
@@ -30,31 +37,53 @@ const RestaurantMenu = () => {
 
   if (!restaurant) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse">Загрузка...</div>
-      </div>
+      <Box 
+        sx={{ 
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center' 
+        }}
+      >
+        <CircularProgress />
+      </Box>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
       
-      <main className="flex-grow pt-16">
+      <Box component="main" sx={{ flexGrow: 1, pt: 8 }}>
         {/* Restaurant Header */}
-        <div className="bg-koshpendi-secondary py-6">
-          <div className="container-custom flex items-center">
-            <img 
-              src={restaurant.logo} 
-              alt={restaurant.name} 
-              className="w-16 h-16 rounded-full object-cover border-2 border-white mr-4"
-            />
-            <div>
-              <h1 className="text-koshpendi-text-dark text-2xl font-bold">{restaurant.name}</h1>
-              <p className="text-koshpendi-text-light">{restaurant.description}</p>
-            </div>
-          </div>
-        </div>
+        <Box sx={{ bgcolor: 'secondary.main', py: 3 }}>
+          <Container>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box
+                component="img"
+                src={restaurant.logo}
+                alt={restaurant.name}
+                sx={{ 
+                  width: 64, 
+                  height: 64, 
+                  borderRadius: '50%', 
+                  objectFit: 'cover', 
+                  border: 2, 
+                  borderColor: 'background.paper',
+                  mr: 2 
+                }}
+              />
+              <Box>
+                <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
+                  {restaurant.name}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  {restaurant.description}
+                </Typography>
+              </Box>
+            </Box>
+          </Container>
+        </Box>
         
         {/* QR Info Modal */}
         <QRInfoModal 
@@ -71,27 +100,39 @@ const RestaurantMenu = () => {
         />
         
         {/* Dishes */}
-        <div className="container-custom py-8">
+        <Container sx={{ py: 4 }}>
           {restaurant.categories
             .filter(category => activeCategory === null || category.id === activeCategory)
             .map(category => (
-              <div key={category.id} className="mb-12">
-                <h2 className="text-koshpendi-text-dark text-2xl font-semibold mb-6">{category.name}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Box key={category.id} sx={{ mb: 6 }}>
+                <Typography 
+                  variant="h5" 
+                  component="h2" 
+                  sx={{ 
+                    fontWeight: 600, 
+                    color: 'text.primary',
+                    mb: 3 
+                  }}
+                >
+                  {category.name}
+                </Typography>
+                <Grid container spacing={3}>
                   {category.dishes.map(dish => (
-                    <DishCard key={dish.id} dish={dish} />
+                    <Grid item xs={12} md={6} key={dish.id}>
+                      <DishCard dish={dish} />
+                    </Grid>
                   ))}
-                </div>
-              </div>
+                </Grid>
+              </Box>
             ))}
-        </div>
+        </Container>
         
         {/* Cart Button */}
         <Cart />
-      </main>
+      </Box>
 
       <Footer />
-    </div>
+    </Box>
   );
 };
 

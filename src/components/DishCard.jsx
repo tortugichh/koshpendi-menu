@@ -1,5 +1,15 @@
 import PropTypes from 'prop-types';
-import { Plus, Minus } from 'lucide-react';
+import { 
+  Card, 
+  CardContent, 
+  CardMedia, 
+  Typography, 
+  Box, 
+  IconButton, 
+  Button 
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { formatCurrency } from '../utils/formatCurrency';
 import { useCart } from '../context/CartContext';
 
@@ -9,53 +19,84 @@ const DishCard = ({ dish }) => {
   const quantity = cartItem ? cartItem.quantity : 0;
   
   return (
-    <div className="card flex">
-      <img 
-        src={dish.image} 
-        alt={dish.name} 
-        className="w-24 h-24 object-cover rounded-kosh-sm"
+    <Card 
+      sx={{ 
+        display: 'flex',
+        height: '100%',
+        p: 2,
+        boxShadow: 'none'
+      }}
+    >
+      <CardMedia
+        component="img"
+        sx={{ 
+          width: 96, 
+          height: 96, 
+          borderRadius: 1,
+          objectFit: 'cover' 
+        }}
+        image={dish.image}
+        alt={dish.name}
       />
-      <div className="ml-4 flex-grow">
-        <h3 className="text-koshpendi-text-dark font-medium">{dish.name}</h3>
-        <p className="text-koshpendi-text-light text-sm line-clamp-2">{dish.description}</p>
-        <div className="flex justify-between items-center mt-2">
-          <span className="text-koshpendi-text-dark font-medium">
-            {formatCurrency(dish.price)}
-          </span>
-          <div className="flex items-center">
-            {quantity > 0 ? (
-              <>
-                <button 
-                  onClick={() => removeFromCart(dish.id)}
-                  className="p-1 text-koshpendi-primary hover:bg-koshpendi-secondary rounded-full"
-                  aria-label="Уменьшить количество"
-                >
-                  <Minus size={18} />
-                </button>
-                <span className="mx-2 min-w-[20px] text-center">
-                  {quantity}
-                </span>
-                <button 
+      <Box sx={{ display: 'flex', flexDirection: 'column', ml: 2, flex: 1 }}>
+        <CardContent sx={{ flex: '1 0 auto', p: 0, pb: 0, '&:last-child': { pb: 0 } }}>
+          <Typography variant="subtitle1" component="h3" color="text.primary" sx={{ fontWeight: 500 }}>
+            {dish.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>
+            {dish.description}
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+            <Typography variant="subtitle2" color="text.primary" sx={{ fontWeight: 500 }}>
+              {formatCurrency(dish.price)}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {quantity > 0 ? (
+                <>
+                  <IconButton
+                    size="small"
+                    onClick={() => removeFromCart(dish.id)}
+                    color="primary"
+                    aria-label="Уменьшить количество"
+                    sx={{ p: 0.5 }}
+                  >
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                  <Typography sx={{ mx: 1, minWidth: 20, textAlign: 'center' }}>
+                    {quantity}
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    onClick={() => addToCart(dish)}
+                    color="primary"
+                    aria-label="Увеличить количество"
+                    sx={{ p: 0.5 }}
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </>
+              ) : (
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
                   onClick={() => addToCart(dish)}
-                  className="p-1 text-koshpendi-primary hover:bg-koshpendi-secondary rounded-full"
-                  aria-label="Увеличить количество"
+                  sx={{ py: 0.5, px: 1.5 }}
                 >
-                  <Plus size={18} />
-                </button>
-              </>
-            ) : (
-              <button 
-                onClick={() => addToCart(dish)}
-                className="btn-primary py-1 px-3 text-sm"
-              >
-                Добавить
-                
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+                  Добавить
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </CardContent>
+      </Box>
+    </Card>
   );
 };
 

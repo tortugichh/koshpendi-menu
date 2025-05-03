@@ -1,4 +1,5 @@
-import { ShoppingCart } from 'lucide-react';
+import { Button, Box } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCart } from '../context/CartContext';
 import { formatCurrency } from '../utils/formatCurrency';
 
@@ -9,15 +10,40 @@ const Cart = () => {
     return null;
   }
   
+  // Helper function to get the correct word form for the number of items
+  const getWordForm = (count) => {
+    if (count === 1) return 'блюдо';
+    if (count > 1 && count < 5) return 'блюда';
+    return 'блюд';
+  };
+  
   return (
-    <div className="fixed bottom-4 left-0 right-0 flex justify-center z-20">
-      <button className="btn-primary shadow-lg flex items-center px-6 py-3">
-        <ShoppingCart size={20} />
-        <span className="ml-2">
-          {totalItems} {totalItems === 1 ? 'блюдо' : totalItems > 1 && totalItems < 5 ? 'блюда' : 'блюд'} на {formatCurrency(totalPrice)}
-        </span>
-      </button>
-    </div>
+    <Box 
+      sx={{
+        position: 'fixed',
+        bottom: 16,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        zIndex: 20
+      }}
+    >
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        startIcon={<ShoppingCartIcon />}
+        sx={{
+          px: 3,
+          py: 1.5,
+          boxShadow: 3,
+          borderRadius: 2
+        }}
+      >
+        {totalItems} {getWordForm(totalItems)} на {formatCurrency(totalPrice)}
+      </Button>
+    </Box>
   );
 };
 

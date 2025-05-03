@@ -1,11 +1,26 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu } from 'lucide-react';
-import { useIsMobile } from '../hooks/useIsMobile';
+import { Link as RouterLink } from 'react-router-dom';
+import { 
+  AppBar, 
+  Toolbar, 
+  Typography, 
+  Button,
+  IconButton, 
+  Drawer, 
+  List, 
+  ListItem, 
+  ListItemText, 
+  Box, 
+  Container, 
+  useMediaQuery,
+  useTheme 
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const menuItems = [
     { text: 'Меню', path: '/restaurants' },
@@ -17,79 +32,100 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white border-b border-koshpendi-border z-50">
-      <div className="container-custom">
-        <div className="flex items-center justify-between h-16">
+    <AppBar position="fixed" color="background">
+      <Container>
+        <Toolbar disableGutters sx={{ height: 64 }}>
           {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-koshpendi-primary mr-2"></div>
-            <span className="font-semibold text-koshpendi-text-dark">
+          <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+            <Box 
+              sx={{ 
+                width: 32, 
+                height: 32, 
+                borderRadius: '50%', 
+                bgcolor: 'primary.main', 
+                mr: 1 
+              }} 
+            />
+            <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
               Kóshpendi Menu
-            </span>
-          </Link>
+            </Typography>
+          </Box>
+
+          <Box sx={{ flexGrow: 1 }} />
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-4">
-            {menuItems.map((item, index) => (
-              <Link
-                key={index}
-                to={item.path}
-                className="text-koshpendi-text-dark hover:text-koshpendi-primary px-3 py-2"
-              >
-                {item.text}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2"
-            onClick={toggleDrawer}
-            aria-label="Menu"
-          >
-            <Menu size={24} />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer Navigation */}
-      {isMobile && (
-        <div 
-          className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity ${
-            drawerOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-          onClick={toggleDrawer}
-        >
-          <div 
-            className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform ${
-              drawerOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-4 border-b border-koshpendi-border">
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-koshpendi-primary mr-2"></div>
-                <span className="font-semibold text-koshpendi-text-dark">
-                  Kóshpendi Menu
-                </span>
-              </div>
-            </div>
-            <nav className="p-4">
+          {!isMobile && (
+            <Box sx={{ display: 'flex' }}>
               {menuItems.map((item, index) => (
-                <Link
+                <Button
                   key={index}
+                  component={RouterLink}
                   to={item.path}
-                  className="block py-2 text-koshpendi-text-dark hover:text-koshpendi-primary"
-                  onClick={toggleDrawer}
+                  sx={{ 
+                    color: 'text.primary',
+                    mx: 1,
+                    '&:hover': { color: 'primary.main' }
+                  }}
                 >
                   {item.text}
-                </Link>
+                </Button>
               ))}
-            </nav>
-          </div>
-        </div>
-      )}
-    </header>
+            </Box>
+          )}
+
+          {/* Mobile Menu Button */}
+          {isMobile && (
+            <IconButton 
+              color="inherit" 
+              aria-label="menu"
+              onClick={toggleDrawer}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+        </Toolbar>
+      </Container>
+
+      {/* Mobile Drawer Navigation */}
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer}
+      >
+        <Box sx={{ width: 250 }}>
+          <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center' }}>
+            <Box 
+              sx={{ 
+                width: 32, 
+                height: 32, 
+                borderRadius: '50%', 
+                bgcolor: 'primary.main', 
+                mr: 1 
+              }} 
+            />
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+              Kóshpendi Menu
+            </Typography>
+          </Box>
+          <List>
+            {menuItems.map((item, index) => (
+              <ListItem 
+                key={index} 
+                button 
+                component={RouterLink} 
+                to={item.path}
+                onClick={toggleDrawer}
+              >
+                <ListItemText 
+                  primary={item.text} 
+                  primaryTypographyProps={{ color: 'text.primary' }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </AppBar>
   );
 };
 

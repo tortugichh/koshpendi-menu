@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import { CartProvider } from './context/CartContext';
+import theme from './theme';
 
 // Pages
 import Index from './pages/Index';
@@ -10,17 +12,20 @@ import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <CartProvider>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/restaurants" element={<RestaurantSelection />} />
-          <Route path="/menu/:id" element={<RestaurantMenu />} />
-          <Route path="/registration" element={<RestaurantRegistration />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </CartProvider>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/restaurants" element={<RestaurantSelection />} />
+            <Route path="/menu/:id" element={<RestaurantMenu />} />
+            <Route path="/registration" element={<RestaurantRegistration />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </CartProvider>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

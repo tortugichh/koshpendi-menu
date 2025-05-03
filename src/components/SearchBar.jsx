@@ -1,20 +1,25 @@
 import PropTypes from 'prop-types';
-import { Search } from 'lucide-react';
+import { Box, TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = ({ searchTerm, setSearchTerm, placeholder }) => {
   return (
-    <div className="relative max-w-md mx-auto mb-12">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <Search className="text-koshpendi-text-light h-5 w-5" />
-      </div>
-      <input
-        type="text"
-        className="input-field pl-10"
+    <Box sx={{ maxWidth: 'md', mx: 'auto', mb: 6 }}>
+      <TextField
+        fullWidth
+        variant="outlined"
         placeholder={placeholder || "Поиск..."}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon color="action" />
+            </InputAdornment>
+          ),
+        }}
       />
-    </div>
+    </Box>
   );
 };
 
