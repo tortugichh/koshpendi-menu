@@ -15,7 +15,7 @@ import QRCode from 'react-qr-code';
 const QRCodeModal = ({ isOpen, onClose, restaurant }) => {
   if (!restaurant) return null;
 
-  // Изменяем URL, убирая хэш из пути
+ 
   const menuUrl = `${window.location.origin}/menu/${restaurant.id}`;
 
   return (
