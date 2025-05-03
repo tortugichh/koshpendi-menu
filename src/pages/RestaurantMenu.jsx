@@ -5,14 +5,20 @@ import {
   Container, 
   Typography, 
   Grid, 
-  CircularProgress 
+  CircularProgress, 
+  Tabs,
+  Tab,
+  Divider
 } from '@mui/material';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import InfoIcon from '@mui/icons-material/Info';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CategoryMenu from '../components/CategoryMenu';
 import DishCard from '../components/DishCard';
 import Cart from '../components/Cart';
 import QRInfoModal from '../components/QRInfoModal';
+import RestaurantDetails from '../components/RestaurantDetails';
 import { restaurants } from '../data/mockData';
 
 const RestaurantMenu = () => {
@@ -20,6 +26,7 @@ const RestaurantMenu = () => {
   const [activeCategory, setActiveCategory] = useState(null);
   const [restaurant, setRestaurant] = useState(null);
   const [showQR, setShowQR] = useState(true);
+  const [activeTab, setActiveTab] = useState(0);
   
   // Find restaurant by id
   useEffect(() => {
@@ -33,6 +40,11 @@ const RestaurantMenu = () => {
   // Close QR info modal
   const closeQR = () => {
     setShowQR(false);
+  };
+
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
   };
 
   if (!restaurant) {
@@ -61,7 +73,7 @@ const RestaurantMenu = () => {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Box
                 component="img"
-                src={restaurant.logo}
+                src={restaurant.logo || restaurant.image}
                 alt={restaurant.name}
                 sx={{ 
                   width: 64, 
@@ -78,7 +90,7 @@ const RestaurantMenu = () => {
                   {restaurant.name}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                  {restaurant.description}
+                  {restaurant.description.split('.')[0] + '.'}
                 </Typography>
               </Box>
             </Box>
@@ -92,43 +104,73 @@ const RestaurantMenu = () => {
           restaurantName={restaurant.name} 
         />
         
-        {/* Categories Navigation */}
-        <CategoryMenu 
-          categories={restaurant.categories} 
-          activeCategory={activeCategory} 
-          setActiveCategory={setActiveCategory} 
-        />
+        {/* Tabs Navigation */}
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Container>
+            <Tabs 
+              value={activeTab} 
+              onChange={handleTabChange} 
+              aria-label="restaurant tabs"
+            >
+              <Tab icon={<MenuBookIcon />} label="Меню" id="tab-0" />
+              <Tab icon={<InfoIcon />} label="О ресторане" id="tab-1" />
+            </Tabs>
+          </Container>
+        </Box>
         
-        {/* Dishes */}
-        <Container sx={{ py: 4 }}>
-          {restaurant.categories
-            .filter(category => activeCategory === null || category.id === activeCategory)
-            .map(category => (
-              <Box key={category.id} sx={{ mb: 6 }}>
-                <Typography 
-                  variant="h5" 
-                  component="h2" 
-                  sx={{ 
-                    fontWeight: 600, 
-                    color: 'text.primary',
-                    mb: 3 
-                  }}
-                >
-                  {category.name}
-                </Typography>
-                <Grid container spacing={3}>
-                  {category.dishes.map(dish => (
-                    <Grid item xs={12} md={6} key={dish.id}>
-                      <DishCard dish={dish} />
-                    </Grid>
+        {/* Menu Tab Content */}
+        <Box role="tabpanel" hidden={activeTab !== 0}>
+          {activeTab === 0 && (
+            <>
+              {/* Categories Navigation */}
+              <CategoryMenu 
+                categories={restaurant.categories} 
+                activeCategory={activeCategory} 
+                setActiveCategory={setActiveCategory} 
+              />
+              
+              {/* Dishes */}
+              <Container sx={{ py: 4 }}>
+                {restaurant.categories
+                  .filter(category => activeCategory === null || category.id === activeCategory)
+                  .map(category => (
+                    <Box key={category.id} sx={{ mb: 6 }}>
+                      <Typography 
+                        variant="h5" 
+                        component="h2" 
+                        sx={{ 
+                          fontWeight: 600, 
+                          color: 'text.primary',
+                          mb: 3 
+                        }}
+                      >
+                        {category.name}
+                      </Typography>
+                      <Grid container spacing={3}>
+                        {category.dishes.map(dish => (
+                          <Grid item xs={12} md={6} key={dish.id}>
+                            <DishCard dish={dish} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
                   ))}
-                </Grid>
-              </Box>
-            ))}
-        </Container>
+              </Container>
+            </>
+          )}
+        </Box>
         
-        {/* Cart Button */}
-        <Cart />
+        {/* Restaurant Details Tab Content */}
+        <Box role="tabpanel" hidden={activeTab !== 1}>
+          {activeTab === 1 && (
+            <Container sx={{ py: 4 }}>
+              <RestaurantDetails restaurant={restaurant} />
+            </Container>
+          )}
+        </Box>
+        
+        {/* Cart Button - only show in menu tab */}
+        {activeTab === 0 && <Cart />}
       </Box>
 
       <Footer />
