@@ -23,7 +23,7 @@ const Header = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const menuItems = [
-    { text: 'Меню', path: '/restaurants' },
+    { text: 'Рестораны', path: '/restaurants' },
     { text: 'Регистрация для ресторанов', path: '/registration' }
   ];
 
