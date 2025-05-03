@@ -17,6 +17,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      
       <HashRouter>
         <CartProvider>
           <Routes>
