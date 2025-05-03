@@ -41,7 +41,7 @@ const RestaurantCard = ({ restaurant }) => {
           }
         }}
       >
-        <Link to={`/menu/${restaurant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={`/restaurant/${restaurant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <CardActionArea>
             <CardMedia
               component="img"

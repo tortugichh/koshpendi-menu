@@ -150,7 +150,7 @@ const RestaurantDetails = ({ restaurant }) => {
             onClick={handleOpenQrModal}
             sx={{ mt: 2 }}
           >
-            Показать QR-код
+            Показать QR-код меню
           </Button>
         </Box>
       </Box>
