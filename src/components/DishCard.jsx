@@ -49,6 +49,7 @@ const DishCard = ({ dish }) => {
                 className="btn-primary py-1 px-3 text-sm"
               >
                 Добавить
+                
               </button>
             )}
           </div>
