@@ -28,7 +28,7 @@ const App = () => {
               path="/registration-choice"
               element={<RegistrationChoice />}
             />
-            <Route path="/restaurant/:id" element={<RestaurantPage/>}/>
+            <Route path="/restaurant/:id" element={<RestaurantPage/>  }/>
             <Route path="/user-registration" element={<UserRegistration />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

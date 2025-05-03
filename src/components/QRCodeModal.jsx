@@ -10,7 +10,7 @@ import {
   IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import QRCode from 'react-qr-code';          // ← главное дополнение
+import QRCode from 'react-qr-code';          
 
 const QRCodeModal = ({ isOpen, onClose, restaurant }) => {
   if (!restaurant) return null;
