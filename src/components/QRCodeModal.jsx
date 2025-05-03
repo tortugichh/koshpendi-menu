@@ -16,7 +16,7 @@ const QRCodeModal = ({ isOpen, onClose, restaurant }) => {
   if (!restaurant) return null;
 
  
-  const menuUrl = `${window.location.origin}/menu/${restaurant.id}`;
+  const menuUrl = `${window.location.origin}/#/menu/${restaurant.id}`;
 
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="sm">

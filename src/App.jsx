@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { CartProvider } from "./context/CartContext";
 import theme from "./theme";
@@ -17,15 +17,12 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
+      <HashRouter>
         <CartProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/restaurants" element={<RestaurantSelection />} />
-            
             <Route path="/menu/:id" element={<RestaurantMenu />} />
-           
-           
             <Route path="/registration" element={<RestaurantRegistration />} />
             <Route
               path="/registration-choice"
@@ -36,7 +33,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </CartProvider>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   );
 };
