@@ -11,6 +11,7 @@ import RestaurantRegistration from "./pages/RestaurantRegistration";
 import RegistrationChoice from "./pages/RegistrationChoice";
 import UserRegistration from "./pages/UserRegistration";
 import NotFound from "./pages/NotFound";
+import RestaurantPage from "./pages/RestaurantPage";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
               path="/registration-choice"
               element={<RegistrationChoice />}
             />
+            <Route path="/restaurant/:id" element={<RestaurantPage />} />
             <Route path="/user-registration" element={<UserRegistration />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

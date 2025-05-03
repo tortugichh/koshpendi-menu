@@ -27,7 +27,7 @@ const QRInfoModal = ({ isOpen, onClose, restaurantName }) => {
       <DialogTitle>QR-меню ресторана</DialogTitle>
       <DialogContent>
         <Typography variant="body1" color="text.secondary" gutterBottom>
-          Вы открыли QR-меню ресторана "{restaurantName}". Теперь вы можете:
+          Вы отсканировали QR-код и открыли меню ресторана "{restaurantName}". Теперь вы можете:
         </Typography>
 
         <List sx={{ mb: 2 }}>

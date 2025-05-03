@@ -4,36 +4,24 @@ import {
   Box, 
   Container, 
   Typography, 
-  Grid, 
   CircularProgress
 } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import CategoryMenu from '../components/CategoryMenu';
-import DishCard from '../components/DishCard';
-import Cart from '../components/Cart';
-import QRInfoModal from '../components/QRInfoModal';
+import RestaurantDetails from '../components/RestaurantDetails';
 import { restaurants } from '../data/mockData';
 
-const RestaurantMenu = () => {
+const RestaurantPage = () => {
   const { id } = useParams();
-  const [activeCategory, setActiveCategory] = useState(null);
   const [restaurant, setRestaurant] = useState(null);
-  const [showQR, setShowQR] = useState(true);
   
   // Find restaurant by id
   useEffect(() => {
     const restaurantData = restaurants.find(r => r.id === Number(id));
     if (restaurantData) {
       setRestaurant(restaurantData);
-      setActiveCategory(restaurantData.categories[0]?.id || null);
     }
   }, [id]);
-
-  // Close QR info modal
-  const closeQR = () => {
-    setShowQR(false);
-  };
 
   if (!restaurant) {
     return (
@@ -78,57 +66,17 @@ const RestaurantMenu = () => {
                   {restaurant.name}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                  Меню ресторана
+                  {restaurant.description.split('.')[0] + '.'}
                 </Typography>
               </Box>
             </Box>
           </Container>
         </Box>
         
-        {/* QR Info Modal */}
-        <QRInfoModal 
-          isOpen={showQR} 
-          onClose={closeQR} 
-          restaurantName={restaurant.name} 
-        />
-        
-        {/* Categories Navigation */}
-        <CategoryMenu 
-          categories={restaurant.categories} 
-          activeCategory={activeCategory} 
-          setActiveCategory={setActiveCategory} 
-        />
-        
-        {/* Dishes */}
+        {/* Restaurant Details */}
         <Container sx={{ py: 4 }}>
-          {restaurant.categories
-            .filter(category => activeCategory === null || category.id === activeCategory)
-            .map(category => (
-              <Box key={category.id} sx={{ mb: 6 }}>
-                <Typography 
-                  variant="h5" 
-                  component="h2" 
-                  sx={{ 
-                    fontWeight: 600, 
-                    color: 'text.primary',
-                    mb: 3 
-                  }}
-                >
-                  {category.name}
-                </Typography>
-                <Grid container spacing={3}>
-                  {category.dishes.map(dish => (
-                    <Grid item xs={12} md={6} key={dish.id}>
-                      <DishCard dish={dish} />
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            ))}
+          <RestaurantDetails restaurant={restaurant} />
         </Container>
-        
-        {/* Cart Button */}
-        <Cart />
       </Box>
 
       <Footer />
@@ -136,4 +84,4 @@ const RestaurantMenu = () => {
   );
 };
 
-export default RestaurantMenu;
+export default RestaurantPage;

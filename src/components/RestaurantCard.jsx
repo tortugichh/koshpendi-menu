@@ -41,7 +41,7 @@ const RestaurantCard = ({ restaurant }) => {
           }
         }}
       >
-        <Link to={`/menu/${restaurant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to={`/restaurant/${restaurant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <CardActionArea>
             <CardMedia
               component="img"
@@ -85,17 +85,7 @@ const RestaurantCard = ({ restaurant }) => {
         <Box sx={{ px: 2, pb: 2 }}>
           <Grid container spacing={1}>
             <Grid item xs={6}>
-              <Button
-                component={Link}
-                to={`/menu/${restaurant.id}`}
-                variant="contained"
-                color="primary"
-                fullWidth
-                startIcon={<RestaurantMenuIcon />}
-                size="small"
-              >
-                Меню
-              </Button>
+             
             </Grid>
             <Grid item xs={6}>
               <Button
