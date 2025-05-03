@@ -135,10 +135,15 @@ const UserRegistration = () => {
               Создайте аккаунт
             </Typography>
 
-            <Box component="form" onSubmit={handleSubmit} noValidate>
-              <Grid container spacing={3}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ width: "100%" }}
+            >
+              <Grid container spacing={3} sx={{ width: "100%", m: 0 }}>
                 {/* Username */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ p: 0, pt: 3, width: "100%" }}>
                   <TextField
                     required
                     fullWidth
@@ -149,11 +154,13 @@ const UserRegistration = () => {
                     onChange={handleChange}
                     error={!!errors.username}
                     helperText={errors.username}
+                    sx={{ width: "100%" }}
+                    inputProps={{ style: { width: "100%" } }}
                   />
                 </Grid>
 
                 {/* Email */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ p: 0, pt: 3, width: "100%" }}>
                   <TextField
                     required
                     fullWidth
@@ -165,11 +172,13 @@ const UserRegistration = () => {
                     onChange={handleChange}
                     error={!!errors.email}
                     helperText={errors.email}
+                    sx={{ width: "100%" }}
+                    inputProps={{ style: { width: "100%" } }}
                   />
                 </Grid>
 
                 {/* Password */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ p: 0, pt: 3, width: "100%" }}>
                   <TextField
                     required
                     fullWidth
@@ -181,11 +190,13 @@ const UserRegistration = () => {
                     onChange={handleChange}
                     error={!!errors.password}
                     helperText={errors.password}
+                    sx={{ width: "100%" }}
+                    inputProps={{ style: { width: "100%" } }}
                   />
                 </Grid>
 
                 {/* Confirm Password */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ p: 0, pt: 3, width: "100%" }}>
                   <TextField
                     required
                     fullWidth
@@ -197,11 +208,13 @@ const UserRegistration = () => {
                     onChange={handleChange}
                     error={!!errors.confirmPassword}
                     helperText={errors.confirmPassword}
+                    sx={{ width: "100%" }}
+                    inputProps={{ style: { width: "100%" } }}
                   />
                 </Grid>
 
                 {/* Terms Agreement */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ p: 0, pt: 3, width: "100%" }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -232,26 +245,34 @@ const UserRegistration = () => {
                   )}
                 </Grid>
 
-                {/* Submit Button */}
-                <Grid item xs={12}>
+                {/* Submit Button and Login Link */}
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    p: 0,
+                    pt: 3,
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <Button
                     type="submit"
-                    fullWidth
                     variant="contained"
                     color="primary"
                     size="large"
-                    sx={{ mt: 2 }}
+                    sx={{ width: "48%" }}
                   >
                     Зарегистрироваться
                   </Button>
-                </Grid>
 
-                {/* Login Link */}
-                <Grid item xs={12}>
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    align="center"
+                    sx={{ width: "48%", textAlign: "right" }}
                   >
                     Уже есть аккаунт?{" "}
                     <Link href="#" color="primary">
@@ -264,7 +285,6 @@ const UserRegistration = () => {
           </Paper>
         </Container>
       </Box>
-
       <Footer />
     </Box>
   );
