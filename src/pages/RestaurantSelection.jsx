@@ -4,8 +4,7 @@ import {
   Container, 
   Typography, 
   Grid, 
-  Paper, 
-  Alert
+  Paper
 } from '@mui/material';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -27,7 +26,7 @@ const RestaurantSelection = () => {
       <Header />
       
       <Box component="main" sx={{ flexGrow: 1, pt: 8, pb: 8 }}>
-        <Container>
+        <Container maxWidth="lg">
           <Typography 
             variant="h4" 
             component="h1" 
@@ -68,15 +67,28 @@ const RestaurantSelection = () => {
             </Typography>
           </Paper>
           
-          {/* Restaurant List */}
+          {/* Restaurant List - Fixed with exactly 3 cards per row */}
           {filteredRestaurants.length > 0 ? (
-            <Grid container spacing={3}>
+            <Box sx={{ 
+              display: 'grid', 
+              gridTemplateColumns: {
+                xs: '1fr',                  // 1 card per row on mobile
+                sm: '1fr 1fr',              // 2 cards per row on tablet
+                md: '1fr 1fr 1fr'           // 3 cards per row on desktop
+              },
+              gap: 3
+            }}>
               {filteredRestaurants.map(restaurant => (
-                <Grid item xs={12} sm={6} md={4} key={restaurant.id}>
+                <Box 
+                  key={restaurant.id}
+                  sx={{ 
+                    height: '100%'
+                  }}
+                >
                   <RestaurantCard restaurant={restaurant} />
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           ) : (
             <Box sx={{ textAlign: 'center', py: 8 }}>
               <Typography variant="h6" component="h3" sx={{ mb: 1, color: 'text.primary' }}>
