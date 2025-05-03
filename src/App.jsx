@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { CartProvider } from "./context/CartContext";
 import theme from "./theme";
@@ -22,7 +22,10 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/restaurants" element={<RestaurantSelection />} />
+            
             <Route path="/menu/:id" element={<RestaurantMenu />} />
+           
+           
             <Route path="/registration" element={<RestaurantRegistration />} />
             <Route
               path="/registration-choice"
