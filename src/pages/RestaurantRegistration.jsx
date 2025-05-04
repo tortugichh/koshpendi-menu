@@ -25,9 +25,7 @@ import { authAPI } from '../services/api';
 
 const RestaurantRegistration = () => {
   const [formData, setFormData] = useState({
-    restaurantName: '',
-    contactName: '',
-    phone: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -63,18 +61,8 @@ const RestaurantRegistration = () => {
   const validate = () => {
     const newErrors = {};
     
-    if (!formData.restaurantName.trim()) {
-      newErrors.restaurantName = 'Название ресторана обязательно';
-    }
-    
-    if (!formData.contactName.trim()) {
-      newErrors.contactName = 'Имя контактного лица обязательно';
-    }
-    
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Телефон обязателен';
-    } else if (!/^\+?[0-9]{10,12}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Неверный формат телефона';
+    if (!formData.username.trim()) {
+      newErrors.username = 'Имя пользователя обязательно';
     }
     
     if (!formData.email.trim()) {
@@ -108,15 +96,15 @@ const RestaurantRegistration = () => {
       setIsLoading(true);
       
       try {
-        // Prepare data for API - роль будет добавлена в authAPI.registerRestaurant
+        // Prepare data for API - только обязательные поля
         const apiData = {
-          name: formData.restaurantName,
-          contactPerson: formData.contactName,
-          phone: formData.phone,
+          password: formData.password,
           email: formData.email,
-          password: formData.password
-          // Роль 'restaurant' будет добавлена автоматически в API сервисе
+          username: formData.username,
+          // role: 'restaurant' добавляется автоматически в API сервисе
         };
+        
+        console.log('Отправляемые данные:', apiData);
         
         // Call the API service
         const response = await authAPI.registerRestaurant(apiData);
@@ -126,9 +114,7 @@ const RestaurantRegistration = () => {
         
         // Reset form
         setFormData({
-          restaurantName: '',
-          contactName: '',
-          phone: '',
+          username: '',
           email: '',
           password: '',
           confirmPassword: '',
@@ -138,24 +124,38 @@ const RestaurantRegistration = () => {
         console.error('Registration error:', error);
         
         // Handle API validation errors (field-specific errors)
-        if (error.errors) {
+        if (error.username) {
+          setErrors(prev => ({
+            ...prev,
+            username: Array.isArray(error.username) ? error.username[0] : error.username
+          }));
+        } else if (error.errors) {
           const fieldErrors = {};
           Object.entries(error.errors).forEach(([field, message]) => {
-            // Map backend field names to frontend field names if needed
-            const fieldMap = {
-              name: 'restaurantName',
-              contactPerson: 'contactName',
-              // Add more mappings if needed
-            };
-            const formField = fieldMap[field] || field;
-            fieldErrors[formField] = Array.isArray(message) ? message[0] : message;
+            fieldErrors[field] = Array.isArray(message) ? message[0] : message;
           });
           setErrors(fieldErrors);
+        } else if (typeof error === 'object') {
+          // Если это объект с полями ошибок
+          const fieldErrors = {};
+          Object.entries(error).forEach(([field, message]) => {
+            fieldErrors[field] = Array.isArray(message) ? message[0] : message;
+          });
+          
+          if (Object.keys(fieldErrors).length > 0) {
+            setErrors(fieldErrors);
+          } else {
+            // Отображаем общую ошибку
+            setErrorSnackbar({
+              open: true,
+              message: error.message || 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
+            });
+          }
         } else {
-          // Show general error message
+          // Общая ошибка
           setErrorSnackbar({
             open: true,
-            message: error.message || 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
+            message: 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
           });
         }
       } finally {
@@ -246,51 +246,18 @@ const RestaurantRegistration = () => {
               
               <Box component="form" onSubmit={handleSubmit} noValidate>
                 <Grid container spacing={3}>
-                  {/* Restaurant Name */}
+                  {/* Username */}
                   <Grid item xs={12}>
                     <TextField
                       required
                       fullWidth
-                      id="restaurantName"
-                      name="restaurantName"
-                      label="Название ресторана"
-                      value={formData.restaurantName}
+                      id="username"
+                      name="username"
+                      label="Имя пользователя"
+                      value={formData.username}
                       onChange={handleChange}
-                      error={!!errors.restaurantName}
-                      helperText={errors.restaurantName}
-                      disabled={isLoading}
-                    />
-                  </Grid>
-                  
-                  {/* Contact Person Name */}
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="contactName"
-                      name="contactName"
-                      label="Контактное лицо"
-                      value={formData.contactName}
-                      onChange={handleChange}
-                      error={!!errors.contactName}
-                      helperText={errors.contactName}
-                      disabled={isLoading}
-                    />
-                  </Grid>
-                  
-                  {/* Phone */}
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="phone"
-                      name="phone"
-                      label="Телефон"
-                      placeholder="+7 (XXX) XXX-XX-XX"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      error={!!errors.phone}
-                      helperText={errors.phone}
+                      error={!!errors.username}
+                      helperText={errors.username}
                       disabled={isLoading}
                     />
                   </Grid>

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an axios instance with default config
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://sulpak1-production.up.railway.app',
+  baseURL: 'https://sulpak1-production.up.railway.app',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -21,7 +21,21 @@ api.interceptors.response.use(
     if (error.response) {
       console.error('API Error Response:', error.response);
       
-      // Handle 404 Not Found specifically - endpoint doesn't exist
+      // Return the error data directly if available
+      if (error.response.data) {
+        return Promise.reject(error.response.data);
+      }
+      
+      // Handle 400 Bad Request specifically
+      if (error.response.status === 400) {
+        return Promise.reject({
+          message: 'Ошибка в запросе. Пожалуйста, проверьте данные формы.',
+          status: 400,
+          isBadRequestError: true,
+        });
+      }
+      
+      // Handle 404 Not Found specifically
       if (error.response.status === 404) {
         console.error('API endpoint not found:', error.config.url);
         return Promise.reject({
@@ -29,21 +43,6 @@ api.interceptors.response.use(
           status: 404,
           isNotFoundError: true,
         });
-      }
-      
-      // Handle HTML responses (like 500 errors that return HTML instead of JSON)
-      const contentType = error.response.headers['content-type'];
-      if (contentType && contentType.includes('text/html')) {
-        return Promise.reject({
-          message: 'Ошибка на сервере. Пожалуйста, попробуйте позже.',
-          status: error.response.status,
-          isServerError: true,
-        });
-      }
-      
-      // Handle API error responses with JSON data
-      if (error.response.data) {
-        return Promise.reject(error.response.data);
       }
     } 
     // Request was made but no response received (network error)
@@ -67,37 +66,43 @@ api.interceptors.response.use(
   }
 );
 
-// Authentication API calls with correct endpoints based on your error logs
+// Authentication API calls with correct endpoints based on the error logs
 export const authAPI = {
-  // Register restaurant - с добавлением роли restaurant
+  // Register restaurant - строго поля из требуемого формата
   registerRestaurant: async (restaurantData) => {
     try {
-      // Добавляем роль restaurant к данным
-      const dataWithRole = {
-        ...restaurantData,
-        role: 'restaurant' // добавляем роль для ресторана
+      // Отправляем только необходимые поля согласно требуемому формату
+      const dataToSend = {
+        password: restaurantData.password,
+        email: restaurantData.email,
+        username: restaurantData.username,
+        role: 'restaurant'
       };
       
-      // Используем правильный URL для API
-      const response = await api.post('/api/register/', dataWithRole);
+      console.log('Отправляемые данные:', dataToSend);
+      
+      // Отправляем запрос
+      const response = await api.post('/api/register/', dataToSend);
       return response.data;
     } catch (error) {
-      console.error('Restaurant Registration Error:', error);
+      console.error('Ошибка регистрации ресторана:', error);
       throw error;
     }
   },
 
-  // Register user - с добавлением роли customer
+  // Register user - строго поля из требуемого формата
   registerUser: async (userData) => {
     try {
-      // Добавляем роль customer к данным
-      const dataWithRole = {
-        ...userData,
-        role: 'customer' // добавляем роль для пользователя
+      // Отправляем только необходимые поля
+      const dataToSend = {
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+        role: 'customer'
       };
       
-      // Используем правильный URL для API
-      const response = await api.post('/api/register/', dataWithRole);
+      // Используем URL из логов ошибок
+      const response = await api.post('/api/register/', dataToSend);
       return response.data;
     } catch (error) {
       console.error('User Registration Error:', error);
@@ -108,7 +113,7 @@ export const authAPI = {
   // Login
   login: async (credentials) => {
     try {
-      const response = await api.post('/api/login', credentials);
+      const response = await api.post('/api/login/', credentials);
       return response.data;
     } catch (error) {
       console.error('Login Error:', error);
