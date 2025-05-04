@@ -34,6 +34,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </CartProvider>
+        
       </HashRouter>
     </ThemeProvider>
   );
