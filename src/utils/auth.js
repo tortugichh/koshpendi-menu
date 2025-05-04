@@ -1,6 +1,5 @@
-
-const API_BASE = '/api';
-
+// src/utils/auth.js
+import api from '../services/api';
 
 // Store tokens in localStorage with proper error handling
 export const storeTokens = (accessToken, refreshToken, user) => {
@@ -45,8 +44,13 @@ export const getRefreshToken = () => {
 
 // Get the current user
 export const getCurrentUser = () => {
-  const user = localStorage.getItem('user');
-  return user ? JSON.parse(user) : null;
+  try {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    console.error('Error parsing user data:', error);
+    return null;
+  }
 };
 
 // Clear all authentication data
@@ -61,56 +65,6 @@ export const isAuthenticated = () => {
   return !!getAccessToken();
 };
 
-// Register a new user
-export const register = async (userData) => {
-  try {
-    const response = await fetch(`${API_BASE}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Registration failed');
-    }
-
-    // Store tokens and user data
-    storeTokens(data.access, data.refresh, data.user);
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Login with credentials
-export const login = async (credentials) => {
-  try {
-    const response = await fetch(`${API_BASE}/token/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Login failed');
-    }
-
-    // Store tokens
-    storeTokens(data.access, data.refresh, data.user);
-    return data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 // Refresh the access token using the refresh token
 export const refreshToken = async () => {
   const refresh = getRefreshToken();
@@ -120,80 +74,21 @@ export const refreshToken = async () => {
   }
   
   try {
-    const response = await fetch(`${API_BASE}/token/refresh/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refresh }),
+    const response = await api.post('/api/token/refresh/', {
+      refresh: refresh
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error('Token refresh failed');
+    if (response.data && response.data.access) {
+      // Update the access token
+      localStorage.setItem('accessToken', response.data.access);
+      return response.data.access;
+    } else {
+      throw new Error('Invalid token refresh response');
     }
-
-    // Update the access token
-    localStorage.setItem('accessToken', data.access);
-    return data.access;
   } catch (error) {
     // If refresh fails, logout the user
+    console.error('Token refresh failed:', error);
     logout();
-    throw error;
-  }
-};
-
-// Create a request function with token handling
-export const authenticatedRequest = async (url, options = {}) => {
-  // Get the access token
-  let accessToken = getAccessToken();
-  
-  // Set up headers with the access token
-  let headers = {
-    ...options.headers,
-    'Authorization': `Bearer ${accessToken}`,
-  };
-  
-  try {
-    // Make the request
-    let response = await fetch(url, {
-      ...options,
-      headers,
-    });
-    
-    // If unauthorized, try to refresh the token and retry
-    if (response.status === 401) {
-      try {
-        // Refresh the token
-        accessToken = await refreshToken();
-        
-        // Update headers with new token
-        headers = {
-          ...options.headers,
-          'Authorization': `Bearer ${accessToken}`,
-        };
-        
-        // Retry the request
-        response = await fetch(url, {
-          ...options,
-          headers,
-        });
-      } catch (refreshError) {
-        // If refresh fails, throw the error
-        throw refreshError;
-      }
-    }
-    
-    // Handle the response
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Request failed');
-    }
-    
-    return data;
-  } catch (error) {
     throw error;
   }
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
   Box,
@@ -21,7 +21,7 @@ import { storeTokens, getCurrentUser } from "../utils/auth";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -31,6 +31,19 @@ const LoginPage = () => {
     open: false,
     message: ""
   });
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) {
+      // Redirect based on role
+      if (user.role === 'restaurant') {
+        navigate('/restaurant-dashboard');
+      } else {
+        navigate('/customer-dashboard');
+      }
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,8 +66,8 @@ const LoginPage = () => {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.username.trim()) {
-      newErrors.username = "Имя пользователя обязательно";
+    if (!formData.email.trim()) {
+      newErrors.email = "Имя пользователя обязательно";
     }
 
     if (!formData.password) {
@@ -74,25 +87,27 @@ const LoginPage = () => {
       try {
         // Prepare data for API
         const credentials = {
-          username: formData.username,
+          email: formData.email,
           password: formData.password
         };
         
-        console.log('Attempting login with:', credentials.username);
+        console.log('Attempting login with:', credentials.email);
         
         // Call the API service
         const response = await authAPI.login(credentials);
-        console.log('Login successful:', response);
+        console.log('Login successful');
         
         // Store tokens and user data
-        storeTokens(response.access, response.refresh, response.user);
-        
-        // Redirect based on user role
-        const user = response.user;
-        if (user.role === 'restaurant') {
-          navigate('/restaurant-dashboard');
+        if (storeTokens(response.access, response.refresh, response.user)) {
+          // Redirect based on user role
+          const user = response.user;
+          if (user.role === 'restaurant') {
+            navigate('/restaurant-dashboard');
+          } else {
+            navigate('/customer-dashboard');
+          }
         } else {
-          navigate('/customer-dashboard');
+          throw new Error('Failed to store authentication data');
         }
       } catch (error) {
         console.error('Login error details:', error);
@@ -102,21 +117,19 @@ const LoginPage = () => {
         
         if (error) {
           // Handle different error formats
-          if (error.detail) {
+          if (typeof error === 'string') {
+            errorMessage = error;
+          } else if (error.detail) {
             errorMessage = error.detail;
           } else if (error.non_field_errors && error.non_field_errors.length > 0) {
             errorMessage = error.non_field_errors[0];
           } else if (error.message) {
             errorMessage = error.message;
-          } else if (typeof error === 'string') {
-            errorMessage = error;
-          } else if (error.username) {
+          } else if (error.email) {
             // Field-specific errors
-            setErrors(prev => ({ ...prev, username: Array.isArray(error.username) ? error.username[0] : error.username }));
-            errorMessage = 'Ошибка в имени пользователя';
+            setErrors(prev => ({ ...prev, email: Array.isArray(error.email) ? error.email[0] : error.email }));
           } else if (error.password) {
             setErrors(prev => ({ ...prev, password: Array.isArray(error.password) ? error.password[0] : error.password }));
-            errorMessage = 'Ошибка в пароле';
           }
         }
         
@@ -180,13 +193,13 @@ const LoginPage = () => {
                   <TextField
                     required
                     fullWidth
-                    id="username"
-                    name="username"
-                    label="Имя пользователя"
-                    value={formData.username}
+                    id="email"
+                    name="email"
+                    label="Почта"
+                    value={formData.email}
                     onChange={handleChange}
-                    error={!!errors.username}
-                    helperText={errors.username}
+                    error={!!errors.email}
+                    helperText={errors.email}
                     sx={{ width: "100%" }}
                     disabled={isLoading}
                   />
@@ -262,8 +275,11 @@ const LoginPage = () => {
         open={errorSnackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        message={errorSnackbar.message}
-      />
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          {errorSnackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

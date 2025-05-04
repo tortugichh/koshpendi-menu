@@ -1,5 +1,6 @@
 // src/services/api.js
 import axios from 'axios';
+import { getAccessToken } from '../utils/auth';
 
 // Create an axios instance with default config
 const api = axios.create({
@@ -9,6 +10,18 @@ const api = axios.create({
   },
   timeout: 10000, // 10 seconds timeout
 });
+
+// Request interceptor to add auth token
+api.interceptors.request.use(
+  (config) => {
+    const token = getAccessToken();
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Response interceptor to handle errors globally
 api.interceptors.response.use(
@@ -66,34 +79,32 @@ api.interceptors.response.use(
   }
 );
 
-// Authentication API calls with correct endpoints based on the error logs
+// Authentication API calls with fixed endpoints
 export const authAPI = {
-  // Register restaurant - строго поля из требуемого формата
+  // Register restaurant
   registerRestaurant: async (restaurantData) => {
     try {
-      // Отправляем только необходимые поля согласно требуемому формату
+      // Send only required fields in the correct format
       const dataToSend = {
-        password: restaurantData.password,
-        email: restaurantData.email,
         username: restaurantData.username,
+        email: restaurantData.email,
+        password: restaurantData.password,
         role: 'restaurant'
       };
       
-      console.log('Отправляемые данные:', dataToSend);
+      console.log('Sending restaurant registration data:', dataToSend);
       
-      // Отправляем запрос
       const response = await api.post('/api/register/', dataToSend);
       return response.data;
     } catch (error) {
-      console.error('Ошибка регистрации ресторана:', error);
+      console.error('Restaurant Registration Error:', error);
       throw error;
     }
   },
 
-  // Register user - строго поля из требуемого формата
+  // Register user
   registerUser: async (userData) => {
     try {
-      // Отправляем только необходимые поля
       const dataToSend = {
         username: userData.username,
         email: userData.email,
@@ -101,7 +112,8 @@ export const authAPI = {
         role: 'customer'
       };
       
-      // Используем URL из логов ошибок
+      console.log('Sending user registration data:', dataToSend);
+      
       const response = await api.post('/api/register/', dataToSend);
       return response.data;
     } catch (error) {
@@ -110,35 +122,32 @@ export const authAPI = {
     }
   },
 
-  // Login
-  // Login with credentials
-  // Login with credentials
+  // Login - FIXED: Corrected API endpoint and payload structure
   login: async (credentials) => {
     try {
-      console.log('Login request with credentials:', credentials);
+      console.log('Login request with credentials:', credentials.username);
       
-      // Use the correct endpoint for login
+      // Using the correct endpoint based on error logs
       const response = await api.post('/api/token/', {
-        username: credentials.username,
+        email: credentials.email,
         password: credentials.password
       });
       
-      console.log('Login response:', response.data);
+      console.log('Login response received');
       
-      // Check if we have access and refresh tokens
-      if (!response.data.access || !response.data.refresh) {
-        throw new Error('Invalid token response from server');
-      }
-      
-      // Get user data from token or make a separate request
-      // For now, we'll determine role based on username pattern
-      // In a production app, you'd decode the JWT token or make a user info request
-      const userData = {
+      // Extract user data from response
+      let userData = {
         username: credentials.username,
-        email: credentials.email || '',
-        // If username contains 'rest', assign restaurant role, otherwise customer
-        role: credentials.username.toLowerCase().includes('rest') ? 'restaurant' : 'customer'
       };
+      
+      // If server returns user data, use it
+      if (response.data.user) {
+        userData = response.data.user;
+      } else {
+        // Otherwise, determine role from another source if possible
+        // In a real app, you would decode the JWT token or make a separate call
+        userData.role = response.data.role || 'customer';
+      }
       
       return {
         access: response.data.access,
@@ -147,20 +156,21 @@ export const authAPI = {
       };
     } catch (error) {
       console.error('Login Error:', error);
-      
-      // Provide more helpful error messages
-      if (error.response && error.response.data) {
-        console.error('Server error details:', error.response.data);
-        // Pass along the server's error message if available
-        throw error.response.data;
-      }
-      
-      throw {
-        message: 'Не удалось войти. Проверьте имя пользователя и пароль.'
-      };
+      throw error;
+    }
+  },
+  
+  // Get current user profile
+  getUserProfile: async () => {
+    try {
+      const response = await api.get('/api/profile/');
+      return response.data;
+    } catch (error) {
+      console.error('Get Profile Error:', error);
+      throw error;
     }
   }
 };
 
 // Export default API instance for other services
-export default api;
+export default api;     
