@@ -1,102 +1,150 @@
-import PropTypes from 'prop-types';
-import { 
-  Card, 
-  CardContent, 
-  CardMedia, 
-  Typography, 
-  Box, 
-  IconButton, 
-  Button 
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { formatCurrency } from '../utils/formatCurrency';
-import { useCart } from '../context/CartContext';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  Snackbar,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useCart } from "../context/CartContext";
+import { formatCurrency } from "../utils/formatCurrency";
 
 const DishCard = ({ dish }) => {
-  const { cart, addToCart, removeFromCart } = useCart();
-  const cartItem = cart.find(item => item.id === dish.id);
+  const { cart, addToCart, updateItemQuantity, removeFromCart } = useCart();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  // Check if the dish is already in the cart
+  const cartItem = cart.find((item) => item.id === dish.id);
   const quantity = cartItem ? cartItem.quantity : 0;
-  
+
+  const handleAddToCart = () => {
+    addToCart(dish);
+    setSnackbarOpen(true);
+  };
+
+  const handleIncreaseQuantity = () => {
+    updateItemQuantity(dish.id, quantity + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity === 1) {
+      removeFromCart(dish.id);
+    } else {
+      updateItemQuantity(dish.id, quantity - 1);
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
-    <Card 
-      sx={{ 
-        display: 'flex',
-        height: '100%',
-        p: 2,
-        boxShadow: 'none'
-      }}
-    >
-      <CardMedia
-        component="img"
-        sx={{ 
-          width: 96, 
-          height: 96, 
-          borderRadius: 1,
-          objectFit: 'cover' 
+    <>
+      <Card
+        sx={{
+          display: "flex",
+          height: "100%",
+          borderRadius: 2,
+          boxShadow: "none",
+          border: 1,
+          borderColor: "divider",
         }}
-        image={dish.image}
-        alt={dish.name}
-      />
-      <Box sx={{ display: 'flex', flexDirection: 'column', ml: 2, flex: 1 }}>
-        <CardContent sx={{ flex: '1 0 auto', p: 0, pb: 0, '&:last-child': { pb: 0 } }}>
-          <Typography variant="subtitle1" component="h3" color="text.primary" sx={{ fontWeight: 500 }}>
-            {dish.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            {dish.description}
-          </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-            <Typography variant="subtitle2" color="text.primary" sx={{ fontWeight: 500 }}>
-              {formatCurrency(dish.price)}
+      >
+        <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+          <CardContent sx={{ flex: "1 0 auto", p: 2 }}>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ fontWeight: 600, mb: 1 }}
+            >
+              {dish.name}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {dish.description}
+            </Typography>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ fontWeight: 600, color: "primary.main" }}
+                >
+                  {formatCurrency(dish.price)}
+                </Typography>
+                {dish.weight && (
+                  <Typography variant="caption" color="text.secondary">
+                    {dish.weight} г
+                  </Typography>
+                )}
+              </Box>
+
               {quantity > 0 ? (
-                <>
-                  <IconButton
-                    size="small"
-                    onClick={() => removeFromCart(dish.id)}
-                    color="primary"
-                    aria-label="Уменьшить количество"
-                    sx={{ p: 0.5 }}
-                  >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    border: 1,
+                    borderColor: "divider",
+                    borderRadius: 1,
+                  }}
+                >
+                  <IconButton size="small" onClick={handleDecreaseQuantity}>
                     <RemoveIcon fontSize="small" />
                   </IconButton>
-                  <Typography sx={{ mx: 1, minWidth: 20, textAlign: 'center' }}>
-                    {quantity}
-                  </Typography>
-                  <IconButton
-                    size="small"
-                    onClick={() => addToCart(dish)}
-                    color="primary"
-                    aria-label="Увеличить количество"
-                    sx={{ p: 0.5 }}
-                  >
+                  <Typography sx={{ px: 2 }}>{quantity}</Typography>
+                  <IconButton size="small" onClick={handleIncreaseQuantity}>
                     <AddIcon fontSize="small" />
                   </IconButton>
-                </>
+                </Box>
               ) : (
                 <Button
+                  variant="outlined"
                   size="small"
-                  variant="contained"
-                  color="primary"
-                  onClick={() => addToCart(dish)}
-                  sx={{ py: 0.5, px: 1.5 }}
+                  onClick={handleAddToCart}
                 >
-                  Добавить
+                  В корзину
                 </Button>
               )}
             </Box>
-          </Box>
-        </CardContent>
-      </Box>
-    </Card>
+          </CardContent>
+        </Box>
+
+        {dish.image && (
+          <CardMedia
+            component="img"
+            sx={{
+              width: 120,
+              height: 120,
+              objectFit: "cover",
+              p: 1,
+              borderRadius: 2,
+            }}
+            image={dish.image}
+            alt={dish.name}
+          />
+        )}
+      </Card>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message={`${dish.name} добавлен в корзину`}
+      />
+    </>
   );
 };
 
@@ -104,9 +152,10 @@ DishCard.propTypes = {
   dish: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    weight: PropTypes.number,
   }).isRequired,
 };
 

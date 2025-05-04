@@ -3,7 +3,6 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { CartProvider } from "./context/CartContext";
 import theme from "./theme";
 
-// Pages
 import Index from "./pages/Index";
 import RestaurantSelection from "./pages/RestaurantSelection";
 import RestaurantMenu from "./pages/RestaurantMenu";
@@ -12,12 +11,12 @@ import RegistrationChoice from "./pages/RegistrationChoice";
 import UserRegistration from "./pages/UserRegistration";
 import NotFound from "./pages/NotFound";
 import RestaurantPage from "./pages/RestaurantPage";
-
+import CartPage from "./pages/CartPage";
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      
+
       <HashRouter>
         <CartProvider>
           <Routes>
@@ -31,6 +30,7 @@ const App = () => {
             />
             <Route path="/restaurant/:id" element={<RestaurantPage />} />
             <Route path="/user-registration" element={<UserRegistration />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </CartProvider>

@@ -11,9 +11,12 @@ import {
   Grid,
   Link,
   Alert,
+  CircularProgress,
+  Snackbar
 } from "@mui/material";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { authAPI } from "../services/api";
 
 const UserRegistration = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +29,11 @@ const UserRegistration = () => {
 
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState({
+    open: false,
+    message: ""
+  });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -76,26 +84,65 @@ const UserRegistration = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
-      // In a real app, this would send the data to the server
-      console.log("Form submitted:", formData);
+      setIsLoading(true);
 
-      setSuccessMessage(
-        "Регистрация успешно завершена! Теперь вы можете войти в свой аккаунт."
-      );
+      try {
+        // Prepare data for API - роль будет добавлена в authAPI.registerUser
+        const apiData = {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
+          // Роль 'customer' будет добавлена автоматически в API сервисе
+        };
+        
+        // Call the API service
+        const response = await authAPI.registerUser(apiData);
+        console.log('Registration response:', response);
+        
+        setSuccessMessage(
+          "Регистрация успешно завершена! Теперь вы можете войти в свой аккаунт."
+        );
 
-      // Reset form
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        agreeTerms: false,
-      });
+        // Reset form
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          agreeTerms: false,
+        });
+      } catch (error) {
+        console.error('Registration error:', error);
+        
+        // Handle API validation errors (field-specific errors)
+        if (error.errors) {
+          const fieldErrors = {};
+          Object.entries(error.errors).forEach(([field, message]) => {
+            fieldErrors[field] = Array.isArray(message) ? message[0] : message;
+          });
+          setErrors(fieldErrors);
+        } else {
+          // Show general error message
+          setErrorSnackbar({
+            open: true,
+            message: error.message || 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
+  };
+  
+  const handleCloseSnackbar = () => {
+    setErrorSnackbar({
+      ...errorSnackbar,
+      open: false
+    });
   };
 
   return (
@@ -156,6 +203,7 @@ const UserRegistration = () => {
                     helperText={errors.username}
                     sx={{ width: "100%" }}
                     inputProps={{ style: { width: "100%" } }}
+                    disabled={isLoading}
                   />
                 </Grid>
 
@@ -174,6 +222,7 @@ const UserRegistration = () => {
                     helperText={errors.email}
                     sx={{ width: "100%" }}
                     inputProps={{ style: { width: "100%" } }}
+                    disabled={isLoading}
                   />
                 </Grid>
 
@@ -192,6 +241,7 @@ const UserRegistration = () => {
                     helperText={errors.password}
                     sx={{ width: "100%" }}
                     inputProps={{ style: { width: "100%" } }}
+                    disabled={isLoading}
                   />
                 </Grid>
 
@@ -210,6 +260,7 @@ const UserRegistration = () => {
                     helperText={errors.confirmPassword}
                     sx={{ width: "100%" }}
                     inputProps={{ style: { width: "100%" } }}
+                    disabled={isLoading}
                   />
                 </Grid>
 
@@ -222,6 +273,7 @@ const UserRegistration = () => {
                         checked={formData.agreeTerms}
                         onChange={handleChange}
                         color="primary"
+                        disabled={isLoading}
                       />
                     }
                     label={
@@ -265,8 +317,13 @@ const UserRegistration = () => {
                     color="primary"
                     size="large"
                     sx={{ width: "48%" }}
+                    disabled={isLoading}
                   >
-                    Зарегистрироваться
+                    {isLoading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      'Зарегистрироваться'
+                    )}
                   </Button>
 
                   <Typography
@@ -286,6 +343,14 @@ const UserRegistration = () => {
         </Container>
       </Box>
       <Footer />
+      
+      {/* Error Snackbar */}
+      <Snackbar
+        open={errorSnackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={errorSnackbar.message}
+      />
     </Box>
   );
 };

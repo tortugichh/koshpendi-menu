@@ -14,11 +14,14 @@ import {
   ListItem, 
   ListItemIcon, 
   ListItemText, 
-  Alert 
+  Alert,
+  CircularProgress,
+  Snackbar
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { authAPI } from '../services/api';
 
 const RestaurantRegistration = () => {
   const [formData, setFormData] = useState({
@@ -33,6 +36,11 @@ const RestaurantRegistration = () => {
   
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorSnackbar, setErrorSnackbar] = useState({
+    open: false,
+    message: ''
+  });
   
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -93,26 +101,74 @@ const RestaurantRegistration = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validate()) {
-      // In a real app, this would send the data to the server
-      console.log('Form submitted:', formData);
+      setIsLoading(true);
       
-      setSuccessMessage('Регистрация успешно завершена! Мы свяжемся с вами в ближайшее время.');
-      
-      // Reset form
-      setFormData({
-        restaurantName: '',
-        contactName: '',
-        phone: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        agreeTerms: false,
-      });
+      try {
+        // Prepare data for API - роль будет добавлена в authAPI.registerRestaurant
+        const apiData = {
+          name: formData.restaurantName,
+          contactPerson: formData.contactName,
+          phone: formData.phone,
+          email: formData.email,
+          password: formData.password
+          // Роль 'restaurant' будет добавлена автоматически в API сервисе
+        };
+        
+        // Call the API service
+        const response = await authAPI.registerRestaurant(apiData);
+        console.log('Registration response:', response);
+        
+        setSuccessMessage('Регистрация успешно завершена! Мы свяжемся с вами в ближайшее время.');
+        
+        // Reset form
+        setFormData({
+          restaurantName: '',
+          contactName: '',
+          phone: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          agreeTerms: false,
+        });
+      } catch (error) {
+        console.error('Registration error:', error);
+        
+        // Handle API validation errors (field-specific errors)
+        if (error.errors) {
+          const fieldErrors = {};
+          Object.entries(error.errors).forEach(([field, message]) => {
+            // Map backend field names to frontend field names if needed
+            const fieldMap = {
+              name: 'restaurantName',
+              contactPerson: 'contactName',
+              // Add more mappings if needed
+            };
+            const formField = fieldMap[field] || field;
+            fieldErrors[formField] = Array.isArray(message) ? message[0] : message;
+          });
+          setErrors(fieldErrors);
+        } else {
+          // Show general error message
+          setErrorSnackbar({
+            open: true,
+            message: error.message || 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
+  };
+  
+  const handleCloseSnackbar = () => {
+    setErrorSnackbar({
+      ...errorSnackbar,
+      open: false
+    });
   };
 
   return (
@@ -202,6 +258,7 @@ const RestaurantRegistration = () => {
                       onChange={handleChange}
                       error={!!errors.restaurantName}
                       helperText={errors.restaurantName}
+                      disabled={isLoading}
                     />
                   </Grid>
                   
@@ -217,6 +274,7 @@ const RestaurantRegistration = () => {
                       onChange={handleChange}
                       error={!!errors.contactName}
                       helperText={errors.contactName}
+                      disabled={isLoading}
                     />
                   </Grid>
                   
@@ -233,6 +291,7 @@ const RestaurantRegistration = () => {
                       onChange={handleChange}
                       error={!!errors.phone}
                       helperText={errors.phone}
+                      disabled={isLoading}
                     />
                   </Grid>
                   
@@ -249,6 +308,7 @@ const RestaurantRegistration = () => {
                       onChange={handleChange}
                       error={!!errors.email}
                       helperText={errors.email}
+                      disabled={isLoading}
                     />
                   </Grid>
                   
@@ -265,6 +325,7 @@ const RestaurantRegistration = () => {
                       onChange={handleChange}
                       error={!!errors.password}
                       helperText={errors.password}
+                      disabled={isLoading}
                     />
                   </Grid>
                   
@@ -281,6 +342,7 @@ const RestaurantRegistration = () => {
                       onChange={handleChange}
                       error={!!errors.confirmPassword}
                       helperText={errors.confirmPassword}
+                      disabled={isLoading}
                     />
                   </Grid>
                   
@@ -293,6 +355,7 @@ const RestaurantRegistration = () => {
                           checked={formData.agreeTerms}
                           onChange={handleChange}
                           color="primary"
+                          disabled={isLoading}
                         />
                       }
                       label={
@@ -316,9 +379,14 @@ const RestaurantRegistration = () => {
                       variant="contained"
                       color="primary"
                       size="large"
+                      disabled={isLoading}
                       sx={{ mt: 2 }}
                     >
-                      Зарегистрироваться
+                      {isLoading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        'Зарегистрироваться'
+                      )}
                     </Button>
                     
                     <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
@@ -333,6 +401,14 @@ const RestaurantRegistration = () => {
       </Box>
 
       <Footer />
+      
+      {/* Error Snackbar */}
+      <Snackbar
+        open={errorSnackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={errorSnackbar.message}
+      />
     </Box>
   );
 };
