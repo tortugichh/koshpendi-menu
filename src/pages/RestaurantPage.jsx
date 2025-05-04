@@ -82,6 +82,7 @@ const RestaurantPage = () => {
       <Footer />
     </Box>
   );
+  
 };
 
 export default RestaurantPage;
