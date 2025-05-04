@@ -12,6 +12,9 @@ import UserRegistration from "./pages/UserRegistration";
 import NotFound from "./pages/NotFound";
 import RestaurantPage from "./pages/RestaurantPage";
 import CartPage from "./pages/CartPage";
+import LoginPage from "./pages/LoginPage";
+import CustomerDashboard from "./pages/CustomerDashboard";
+import RestaurantDashboard from "./pages/RestaurantDashboard";
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
@@ -20,7 +23,7 @@ const App = () => {
       <HashRouter>
         <CartProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
+          <Route path="/" element={<Index />} />
             <Route path="/restaurants" element={<RestaurantSelection />} />
             <Route path="/menu/:id" element={<RestaurantMenu />} />
             <Route path="/registration" element={<RestaurantRegistration />} />
@@ -31,6 +34,9 @@ const App = () => {
             <Route path="/restaurant/:id" element={<RestaurantPage />} />
             <Route path="/user-registration" element={<UserRegistration />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+            <Route path="/restaurant-dashboard" element={<RestaurantDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </CartProvider>

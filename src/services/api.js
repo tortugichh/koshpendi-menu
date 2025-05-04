@@ -111,13 +111,53 @@ export const authAPI = {
   },
 
   // Login
+  // Login with credentials
+  // Login with credentials
   login: async (credentials) => {
     try {
-      const response = await api.post('/api/login/', credentials);
-      return response.data;
+      console.log('Login request with credentials:', credentials);
+      
+      // Use the correct endpoint for login
+      const response = await api.post('/api/token/', {
+        username: credentials.username,
+        password: credentials.password
+      });
+      
+      console.log('Login response:', response.data);
+      
+      // Check if we have access and refresh tokens
+      if (!response.data.access || !response.data.refresh) {
+        throw new Error('Invalid token response from server');
+      }
+      
+      // Get user data from token or make a separate request
+      // For now, we'll determine role based on username pattern
+      // In a production app, you'd decode the JWT token or make a user info request
+      const userData = {
+        username: credentials.username,
+        email: credentials.email || '',
+        // If username contains 'rest', assign restaurant role, otherwise customer
+        role: credentials.username.toLowerCase().includes('rest') ? 'restaurant' : 'customer'
+      };
+      
+      return {
+        access: response.data.access,
+        refresh: response.data.refresh,
+        user: userData
+      };
     } catch (error) {
       console.error('Login Error:', error);
-      throw error;
+      
+      // Provide more helpful error messages
+      if (error.response && error.response.data) {
+        console.error('Server error details:', error.response.data);
+        // Pass along the server's error message if available
+        throw error.response.data;
+      }
+      
+      throw {
+        message: 'Не удалось войти. Проверьте имя пользователя и пароль.'
+      };
     }
   }
 };

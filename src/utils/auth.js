@@ -1,11 +1,36 @@
 
 const API_BASE = '/api';
 
-// Store tokens in localStorage
+
+// Store tokens in localStorage with proper error handling
 export const storeTokens = (accessToken, refreshToken, user) => {
-  localStorage.setItem('accessToken', accessToken);
-  localStorage.setItem('refreshToken', refreshToken);
-  localStorage.setItem('user', JSON.stringify(user));
+  try {
+    if (!accessToken || !refreshToken) {
+      console.error('Invalid tokens provided:', { accessToken, refreshToken });
+      throw new Error('Invalid tokens');
+    }
+    
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    
+    // Ensure we have a valid user object before storing
+    const userObj = user || { 
+      username: 'user', 
+      role: 'customer' 
+    };
+    
+    localStorage.setItem('user', JSON.stringify(userObj));
+    
+    console.log('Tokens and user data stored successfully');
+    return true;
+  } catch (error) {
+    console.error('Failed to store auth data:', error);
+    // Clear any potentially corrupted data
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    return false;
+  }
 };
 
 // Get the current access token
