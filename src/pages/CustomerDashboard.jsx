@@ -47,20 +47,16 @@ const CustomerDashboard = () => {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   useEffect(() => {
-    // Get current user from localStorage
     const currentUser = getCurrentUser();
     
     if (!currentUser || currentUser.role !== 'customer') {
-      // Redirect to login if not logged in or not a customer
       navigate('/login');
       return;
     }
     
     setUser(currentUser);
     
-    // Simulate loading orders and favorites
     setTimeout(() => {
-      // Mock data for orders
       setOrders([
         {
           id: 1,
@@ -86,7 +82,6 @@ const CustomerDashboard = () => {
         }
       ]);
       
-      // Mock data for favorite restaurants
       setFavorites([
         {
           id: 1,

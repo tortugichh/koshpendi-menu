@@ -1,4 +1,3 @@
-// Mock restaurant data for the application
 export const restaurants = [
     {
       id: 1,
@@ -80,7 +79,6 @@ export const restaurants = [
       rating: 4.6,
       reviews: 189,
       categories: [
-        // Categories would be here
       ],
     },
     {
@@ -92,7 +90,6 @@ export const restaurants = [
       rating: 4.7,
       reviews: 203,
       categories: [
-        // Categories would be here
       ],
     },
     {
@@ -104,7 +101,6 @@ export const restaurants = [
       rating: 4.9,
       reviews: 312,
       categories: [
-        // Categories would be here
       ],
     },
     {
@@ -116,7 +112,6 @@ export const restaurants = [
       rating: 4.7,
       reviews: 178,
       categories: [
-        // Categories would be here
       ],
     },
     {
@@ -128,7 +123,6 @@ export const restaurants = [
       rating: 4.5,
       reviews: 156,
       categories: [
-        // Categories would be here
       ],
     },
   ];

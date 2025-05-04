@@ -1,20 +1,19 @@
 import { createTheme } from '@mui/material/styles';
 
-// Create a custom theme matching the Koshpendi color scheme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FF9500', // koshpendi-primary
-      dark: '#9A3412', // hover color for primary
+      main: '#FF9500', 
+      dark: '#9A3412', 
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#FFF0DB', // koshpendi-secondary
+      main: '#FFF0DB', 
       contrastText: '#212121',
     },
     text: {
-      primary: '#212121', // koshpendi-text-dark
-      secondary: '#757575', // koshpendi-text-light
+      primary: '#212121', 
+      secondary: '#757575', 
     },
     background: {
       default: '#FFFFFF',
@@ -23,7 +22,7 @@ const theme = createTheme({
     error: {
       main: '#D32F2F',
     },
-    divider: '#EEEEEE', // koshpendi-border
+    divider: '#EEEEEE',
   },
   typography: {
     fontFamily: "'Inter', sans-serif",
@@ -48,7 +47,7 @@ const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 8, // rounded-kosh-md
+    borderRadius: 8, 
   },
   components: {
     MuiButton: {

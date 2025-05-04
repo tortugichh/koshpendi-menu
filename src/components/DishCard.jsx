@@ -19,7 +19,6 @@ const DishCard = ({ dish }) => {
   const { cart, addToCart, updateItemQuantity, removeFromCart } = useCart();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  // Check if the dish is already in the cart
   const cartItem = cart.find((item) => item.id === dish.id);
   const quantity = cartItem ? cartItem.quantity : 0;
 

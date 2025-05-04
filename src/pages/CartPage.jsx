@@ -59,7 +59,6 @@ const CartPage = () => {
 
   const handleCloseOrderDialog = () => {
     setIsOrderDialogOpen(false);
-    // Reset form errors when dialog closed
     setFormErrors({});
   };
 
@@ -99,7 +98,6 @@ const CartPage = () => {
     const errors = validateForm();
 
     if (Object.keys(errors).length === 0) {
-      // Process order submission
       console.log("Order submitted:", {
         ...orderFormData,
         items: cart,
@@ -108,7 +106,6 @@ const CartPage = () => {
       setOrderSuccess(true);
       clearCart();
 
-      // Clear form
       setOrderFormData({
         name: "",
         phone: "",
@@ -116,7 +113,6 @@ const CartPage = () => {
         comment: "",
       });
 
-      // Close dialog after 2 seconds
       setTimeout(() => {
         setIsOrderDialogOpen(false);
         setOrderSuccess(false);

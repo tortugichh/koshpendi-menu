@@ -11,7 +11,6 @@ export const CartProvider = ({ children }) => {
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // Load cart from localStorage on initial load
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -24,7 +23,6 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // Update localStorage whenever cart changes
   useEffect(() => {
     if (cart.length > 0) {
       localStorage.setItem("cart", JSON.stringify(cart));
@@ -32,14 +30,12 @@ export const CartProvider = ({ children }) => {
       localStorage.removeItem("cart");
     }
 
-    // Calculate total items and price
     setTotalItems(cart.reduce((sum, item) => sum + item.quantity, 0));
     setTotalPrice(
       cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     );
   }, [cart]);
 
-  // Add item to cart
   const addToCart = (item) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
@@ -47,7 +43,6 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingItemIndex !== -1) {
-        // Item exists, update quantity
         const updatedCart = [...prevCart];
         updatedCart[existingItemIndex] = {
           ...updatedCart[existingItemIndex],
@@ -55,13 +50,11 @@ export const CartProvider = ({ children }) => {
         };
         return updatedCart;
       } else {
-        // Add new item with quantity 1
         return [...prevCart, { ...item, quantity: 1 }];
       }
     });
   };
 
-  // Update item quantity
   const updateItemQuantity = (itemId, newQuantity) => {
     setCart((prevCart) => {
       return prevCart.map((item) => {
@@ -73,12 +66,10 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Remove item from cart
   const removeFromCart = (itemId) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
   };
 
-  // Clear cart
   const clearCart = () => {
     setCart([]);
     localStorage.removeItem("cart");

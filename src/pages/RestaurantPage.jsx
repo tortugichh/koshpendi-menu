@@ -15,7 +15,6 @@ const RestaurantPage = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   
-  // Find restaurant by id
   useEffect(() => {
     const restaurantData = restaurants.find(r => r.id === Number(id));
     if (restaurantData) {
@@ -82,7 +81,7 @@ const RestaurantPage = () => {
       <Footer />
     </Box>
   );
-  
+
 };
 
 export default RestaurantPage;

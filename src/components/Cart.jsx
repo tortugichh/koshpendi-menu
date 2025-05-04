@@ -12,7 +12,6 @@ const Cart = () => {
     return null;
   }
 
-  // Helper function to get the correct word form for the number of items
   const getWordForm = (count) => {
     if (count === 1) return "блюдо";
     if (count > 1 && count < 5) return "блюда";
@@ -20,7 +19,6 @@ const Cart = () => {
   };
 
   const handleCartClick = () => {
-    // Более прямой способ перехода на страницу корзины
     window.location.href = "#/cart";
   };
 

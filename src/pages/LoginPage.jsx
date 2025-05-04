@@ -32,11 +32,9 @@ const LoginPage = () => {
     message: ""
   });
 
-  // Check if user is already logged in
   useEffect(() => {
     const user = getCurrentUser();
     if (user) {
-      // Redirect based on role
       if (user.role === 'restaurant') {
         navigate('/restaurant-dashboard');
       } else {
@@ -53,7 +51,6 @@ const LoginPage = () => {
       [name]: value,
     }));
 
-    // Clear error when field is edited
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -85,7 +82,6 @@ const LoginPage = () => {
       setIsLoading(true);
 
       try {
-        // Prepare data for API
         const credentials = {
           email: formData.email,
           password: formData.password
@@ -93,13 +89,10 @@ const LoginPage = () => {
         
         console.log('Attempting login with:', credentials.email);
         
-        // Call the API service
         const response = await authAPI.login(credentials);
         console.log('Login successful');
         
-        // Store tokens and user data
         if (storeTokens(response.access, response.refresh, response.user)) {
-          // Redirect based on user role
           const user = response.user;
           if (user.role === 'restaurant') {
             navigate('/restaurant-dashboard');
@@ -112,11 +105,9 @@ const LoginPage = () => {
       } catch (error) {
         console.error('Login error details:', error);
         
-        // Handle specific API error messages
         let errorMessage = 'Неверное имя пользователя или пароль';
         
         if (error) {
-          // Handle different error formats
           if (typeof error === 'string') {
             errorMessage = error;
           } else if (error.detail) {
@@ -126,14 +117,12 @@ const LoginPage = () => {
           } else if (error.message) {
             errorMessage = error.message;
           } else if (error.email) {
-            // Field-specific errors
             setErrors(prev => ({ ...prev, email: Array.isArray(error.email) ? error.email[0] : error.email }));
           } else if (error.password) {
             setErrors(prev => ({ ...prev, password: Array.isArray(error.password) ? error.password[0] : error.password }));
           }
         }
         
-        // Show error message
         setErrorSnackbar({
           open: true,
           message: errorMessage

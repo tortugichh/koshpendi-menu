@@ -33,7 +33,6 @@ const RestaurantDetails = ({ restaurant }) => {
     setQrModalOpen(false);
   };
 
-  // Placeholder for reviews - in a real app, these would come from the backend
   const reviews = [
     {
       id: 1,
@@ -61,7 +60,6 @@ const RestaurantDetails = ({ restaurant }) => {
     }
   ];
 
-  // Placeholder for features - in a real app, these would come from the backend
   const features = [
     'Бесплатный Wi-Fi',
     'Парковка',

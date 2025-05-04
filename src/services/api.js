@@ -1,17 +1,15 @@
-// src/services/api.js
 import axios from 'axios';
 import { getAccessToken } from '../utils/auth';
 
-// Create an axios instance with default config
 const api = axios.create({
   baseURL: 'https://sulpak1-production.up.railway.app',
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds timeout
+  timeout: 10000,
 });
 
-// Request interceptor to add auth token
+
 api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
@@ -23,23 +21,18 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Log all errors for debugging
     console.error('API Error:', error);
     
-    // Server returned a response but with an error status code
     if (error.response) {
       console.error('API Error Response:', error.response);
       
-      // Return the error data directly if available
       if (error.response.data) {
         return Promise.reject(error.response.data);
       }
       
-      // Handle 400 Bad Request specifically
       if (error.response.status === 400) {
         return Promise.reject({
           message: 'Ошибка в запросе. Пожалуйста, проверьте данные формы.',
@@ -48,7 +41,6 @@ api.interceptors.response.use(
         });
       }
       
-      // Handle 404 Not Found specifically
       if (error.response.status === 404) {
         console.error('API endpoint not found:', error.config.url);
         return Promise.reject({
@@ -58,7 +50,6 @@ api.interceptors.response.use(
         });
       }
     } 
-    // Request was made but no response received (network error)
     else if (error.request) {
       console.error('API Request Error:', error.request);
       return Promise.reject({
@@ -66,7 +57,6 @@ api.interceptors.response.use(
         isNetworkError: true,
       });
     } 
-    // Something else happened while setting up the request
     else {
       console.error('API Error:', error.message);
       return Promise.reject({
@@ -79,12 +69,9 @@ api.interceptors.response.use(
   }
 );
 
-// Authentication API calls with fixed endpoints
 export const authAPI = {
-  // Register restaurant
   registerRestaurant: async (restaurantData) => {
     try {
-      // Send only required fields in the correct format
       const dataToSend = {
         username: restaurantData.username,
         email: restaurantData.email,
@@ -102,7 +89,6 @@ export const authAPI = {
     }
   },
 
-  // Register user
   registerUser: async (userData) => {
     try {
       const dataToSend = {
@@ -122,12 +108,10 @@ export const authAPI = {
     }
   },
 
-  // Login - FIXED: Corrected API endpoint and payload structure
   login: async (credentials) => {
     try {
       console.log('Login request with credentials:', credentials.username);
       
-      // Using the correct endpoint based on error logs
       const response = await api.post('/api/token/', {
         email: credentials.email,
         password: credentials.password
@@ -135,17 +119,13 @@ export const authAPI = {
       
       console.log('Login response received');
       
-      // Extract user data from response
       let userData = {
         username: credentials.username,
       };
       
-      // If server returns user data, use it
       if (response.data.user) {
         userData = response.data.user;
       } else {
-        // Otherwise, determine role from another source if possible
-        // In a real app, you would decode the JWT token or make a separate call
         userData.role = response.data.role || 'customer';
       }
       
@@ -160,7 +140,6 @@ export const authAPI = {
     }
   },
   
-  // Get current user profile
   getUserProfile: async () => {
     try {
       const response = await api.get('/api/profile/');
@@ -172,5 +151,4 @@ export const authAPI = {
   }
 };
 
-// Export default API instance for other services
 export default api;     

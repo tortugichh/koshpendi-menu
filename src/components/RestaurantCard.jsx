@@ -21,7 +21,7 @@ const RestaurantCard = ({ restaurant }) => {
   const [qrModalOpen, setQrModalOpen] = useState(false);
 
   const handleOpenQrModal = (e) => {
-    e.preventDefault(); // Prevent link navigation
+    e.preventDefault(); 
     e.stopPropagation();
     setQrModalOpen(true);
   };

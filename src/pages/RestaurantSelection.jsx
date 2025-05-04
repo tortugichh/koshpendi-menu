@@ -15,7 +15,6 @@ import { restaurants } from '../data/mockData';
 const RestaurantSelection = () => {
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Filter restaurants based on search term
   const filteredRestaurants = restaurants.filter(restaurant => 
     restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     restaurant.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,9 +71,9 @@ const RestaurantSelection = () => {
             <Box sx={{ 
               display: 'grid', 
               gridTemplateColumns: {
-                xs: '1fr',                  // 1 card per row on mobile
-                sm: '1fr 1fr',              // 2 cards per row on tablet
-                md: '1fr 1fr 1fr'           // 3 cards per row on desktop
+                xs: '1fr',                 
+                sm: '1fr 1fr',              
+                md: '1fr 1fr 1fr'           
               },
               gap: 3
             }}>

@@ -21,7 +21,6 @@ const RestaurantMenu = () => {
   const [restaurant, setRestaurant] = useState(null);
   const [showQR, setShowQR] = useState(true);
   
-  // Find restaurant by id
   useEffect(() => {
     const restaurantData = restaurants.find(r => r.id === Number(id));
     if (restaurantData) {
@@ -30,7 +29,6 @@ const RestaurantMenu = () => {
     }
   }, [id]);
 
-  // Close QR info modal
   const closeQR = () => {
     setShowQR(false);
   };

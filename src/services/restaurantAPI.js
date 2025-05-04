@@ -1,8 +1,6 @@
-// src/services/restaurantAPI.js
 import api from './api';
 
 export const restaurantAPI = {
-  // Get all restaurants
   getAllRestaurants: async () => {
     try {
       const response = await api.get('/api/restaurant/all/');
@@ -14,7 +12,6 @@ export const restaurantAPI = {
     }
   },
 
-  // Get restaurant by ID
   getRestaurantById: async (id) => {
     try {
       const response = await api.get(`/api/restaurant/${id}/`);
@@ -26,7 +23,6 @@ export const restaurantAPI = {
     }
   },
 
-  // Get restaurant menu by restaurant ID
   getRestaurantMenu: async (restaurantId) => {
     try {
       const response = await api.get(`/api/restaurant/${restaurantId}/menu/`);
@@ -38,7 +34,6 @@ export const restaurantAPI = {
     }
   },
 
-  // Get restaurant reviews by restaurant ID
   getRestaurantReviews: async (restaurantId) => {
     try {
       const response = await api.get(`/api/restaurant/${restaurantId}/reviews/`);
@@ -50,7 +45,6 @@ export const restaurantAPI = {
     }
   },
 
-  // Submit a review for a restaurant
   submitReview: async (restaurantId, reviewData) => {
     try {
       const response = await api.post(`/api/restaurant/${restaurantId}/reviews/`, reviewData);

@@ -32,7 +32,6 @@ const Header = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
-  // Check if user is authenticated
   useEffect(() => {
     setAuthenticated(isAuthenticated());
     setUser(getCurrentUser());
@@ -59,7 +58,6 @@ const Header = () => {
   const handleProfileClick = () => {
     handleUserMenuClose();
     
-    // Redirect based on user role
     if (user && user.role === 'restaurant') {
       navigate('/restaurant-dashboard');
     } else {
@@ -271,7 +269,6 @@ const Header = () => {
           
           <List>
             {menuItems.map((item, index) => (
-              // Hide registration/login when authenticated if specified
               (!authenticated || !item.hideWhenAuth) && (
                 <ListItem
                   key={index}

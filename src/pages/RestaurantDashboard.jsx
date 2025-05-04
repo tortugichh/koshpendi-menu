@@ -64,20 +64,16 @@ const RestaurantDashboard = () => {
   const [qrModalOpen, setQrModalOpen] = useState(false);
 
   useEffect(() => {
-    // Get current user from localStorage
     const currentUser = getCurrentUser();
     
     if (!currentUser || currentUser.role !== 'restaurant') {
-      // Redirect to login if not logged in or not a restaurant
       navigate('/login');
       return;
     }
     
     setUser(currentUser);
     
-    // Simulate loading restaurant data
     setTimeout(() => {
-      // Mock restaurant data
       setRestaurant({
         id: 1,
         name: 'Ресторан "Астана"',
@@ -92,14 +88,12 @@ const RestaurantDashboard = () => {
         workingHours: 'Пн-Вс: 10:00 - 22:00'
       });
       
-      // Mock categories
       setCategories([
         { id: 1, name: 'Закуски' },
         { id: 2, name: 'Основные блюда' },
         { id: 3, name: 'Напитки' }
       ]);
       
-      // Mock menu items
       setMenuItems([
         {
           id: 1,
@@ -153,7 +147,6 @@ const RestaurantDashboard = () => {
         }
       ]);
       
-      // Mock orders
       setOrders([
         {
           id: 1,
@@ -189,7 +182,6 @@ const RestaurantDashboard = () => {
         }
       ]);
       
-      // Mock statistics
       setStatistics({
         totalOrders: 245,
         totalRevenue: 875000,
@@ -202,7 +194,7 @@ const RestaurantDashboard = () => {
       });
       
       setIsLoading(false);
-    }, 1000); // Simulate API call delay
+    }, 1000);
   }, [navigate]);
 
   const handleTabChange = (event, newValue) => {
@@ -252,7 +244,6 @@ const RestaurantDashboard = () => {
     );
   }
 
-  // Helper function to get category name
   const getCategoryName = (categoryId) => {
     const category = categories.find(cat => cat.id === categoryId);
     return category ? category.name : 'Без категории';

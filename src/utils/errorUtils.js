@@ -1,17 +1,12 @@
-// src/utils/errorUtils.js
-
 /**
- * Parses API error responses into a standardized format
- * @param {Object} error - The error object from API catch block
- * @returns {Object} Standardized error object with message and field errors
+ * @param {Object} error 
+ * @returns {Object} 
  */
 export const parseApiError = (error) => {
-    // If the error is already in our format
     if (error.message) {
       return error;
     }
     
-    // If the server returned HTML instead of JSON
     if (error.toString().includes('SyntaxError: Unexpected token')) {
       return {
         message: 'Ошибка на сервере. Пожалуйста, попробуйте позже.',
@@ -19,7 +14,6 @@ export const parseApiError = (error) => {
       };
     }
     
-    // Default error message
     return {
       message: 'Произошла неизвестная ошибка. Пожалуйста, попробуйте еще раз.',
       originalError: error
@@ -27,10 +21,9 @@ export const parseApiError = (error) => {
   };
   
   /**
-   * Maps backend field names to frontend form field names
-   * @param {string} fieldName - The backend field name
-   * @param {string} formType - The form type (e.g., 'restaurant', 'user')
-   * @returns {string} The corresponding frontend field name
+   * @param {string} fieldName 
+   * @param {string} formType
+   * @returns {string} 
    */
   export const mapFieldName = (fieldName, formType = 'user') => {
     const fieldMappings = {

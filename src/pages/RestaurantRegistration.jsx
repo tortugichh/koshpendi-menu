@@ -48,7 +48,6 @@ const RestaurantRegistration = () => {
       [name]: type === 'checkbox' ? checked : value,
     }));
     
-    // Clear error when field is edited
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -96,23 +95,19 @@ const RestaurantRegistration = () => {
       setIsLoading(true);
       
       try {
-        // Prepare data for API - только обязательные поля
         const apiData = {
           password: formData.password,
           email: formData.email,
           username: formData.username,
-          // role: 'restaurant' добавляется автоматически в API сервисе
         };
         
         console.log('Отправляемые данные:', apiData);
         
-        // Call the API service
         const response = await authAPI.registerRestaurant(apiData);
         console.log('Registration response:', response);
         
         setSuccessMessage('Регистрация успешно завершена! Мы свяжемся с вами в ближайшее время.');
         
-        // Reset form
         setFormData({
           username: '',
           email: '',
@@ -123,7 +118,6 @@ const RestaurantRegistration = () => {
       } catch (error) {
         console.error('Registration error:', error);
         
-        // Handle API validation errors (field-specific errors)
         if (error.username) {
           setErrors(prev => ({
             ...prev,
@@ -136,7 +130,6 @@ const RestaurantRegistration = () => {
           });
           setErrors(fieldErrors);
         } else if (typeof error === 'object') {
-          // Если это объект с полями ошибок
           const fieldErrors = {};
           Object.entries(error).forEach(([field, message]) => {
             fieldErrors[field] = Array.isArray(message) ? message[0] : message;
@@ -145,14 +138,12 @@ const RestaurantRegistration = () => {
           if (Object.keys(fieldErrors).length > 0) {
             setErrors(fieldErrors);
           } else {
-            // Отображаем общую ошибку
             setErrorSnackbar({
               open: true,
               message: error.message || 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
             });
           }
         } else {
-          // Общая ошибка
           setErrorSnackbar({
             open: true,
             message: 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.'
