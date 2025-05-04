@@ -47,7 +47,7 @@ const QRInfoModal = ({ isOpen, onClose, restaurantName }) => {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <TableRestaurantIcon color="primary" sx={{ mr: 1 }} />
           <Typography variant="body1" color="text.primary">
-            Стол #12
+            Заказ
           </Typography>
         </Box>
         <Button 

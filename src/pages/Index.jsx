@@ -116,7 +116,7 @@ const Index = () => {
               >
                 <Box
                   component="img"
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&h=400"
+                  src="/photo.png"
                   alt="QR меню на смартфоне"
                   sx={{
                     borderRadius: 2,

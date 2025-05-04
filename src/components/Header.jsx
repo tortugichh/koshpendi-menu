@@ -76,7 +76,11 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="fixed" color="background">
+    <AppBar position="fixed"
+    sx={{
+      bgcolor: "rgb(255, 251, 249)",
+      boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.1)",
+    }}>
       <Container>
         <Toolbar disableGutters sx={{ height: 64 }}>
           {/* Logo */}
@@ -90,21 +94,14 @@ const Header = () => {
               color: "inherit",
             }}
           >
-            <Box
-              sx={{
-                width: 32,
-                height: 32,
-                borderRadius: "50%",
-                bgcolor: "primary.main",
-                mr: 1,
+            <img
+              src="/logologo.jpg"
+              alt="Kóshpendi Menu Logo"
+              style={{
+                width: 150, 
+                height: "150",
               }}
             />
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 600, color: "text.primary" }}
-            >
-              Kóshpendi Menu
-            </Typography>
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />

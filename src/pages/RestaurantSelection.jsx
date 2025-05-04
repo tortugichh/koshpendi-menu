@@ -62,7 +62,7 @@ const RestaurantSelection = () => {
               Как использовать QR-код в ресторане
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Отсканируйте QR-код на столике ресторана с помощью камеры телефона, 
+              Отсканируйте QR-код с помощью камеры телефона, 
               чтобы получить доступ к меню напрямую
             </Typography>
           </Paper>
