@@ -1,12 +1,30 @@
-# React + Vite
+# Koshpendi Menu
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Логотип проекта](https://avatars.githubusercontent.com/u/184860797?v=4)
 
-Currently, two official plugins are available:
+**Koshpendi Menu** — это современное веб-приложение для упрощения управления меню для ресторанов и других заведений.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Демо-версия доступна по [ссылке](https://koshpendi-menu.vercel.app).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📋 Описание
+
+**Koshpendi Menu** создано с использованием новейших технологий фронтенда, чтобы обеспечить высокую скорость работы и удобство использования. Приложение поддерживает гибкость и адаптивность для различных устройств.
+
+---
+
+## 🌟 Основные функции
+
+- **Простота использования**: Понятный интерфейс для пользователей любого уровня.
+- **Отзывчивый дизайн**: Адаптируется под экраны любых размеров.
+- **Модульная архитектура**: Легко настраивается и расширяется.
+
+---
+
+## 🛠️ Технологический стек
+
+- **React**: Основной фреймворк для построения интерфейсов.
+- **Vite**: Инструмент для сборки проекта с быстрой загрузкой модулей.
+- **Tailwind CSS**: Для стилизации и создания адаптивного дизайна.
+- **Material UI**: Компоненты интерфейса с готовыми стилями.
